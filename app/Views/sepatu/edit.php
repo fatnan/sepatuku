@@ -4,17 +4,21 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <h2 class="my-3">Tambah Sepatu</h2>
+            <h2 class="my-3">Edit Sepatu</h2>
             
-            <form action="/sepatu/store" method="post" enctype="multipart/form-data">
+            <form action="/sepatu/update/<?= $sepatu['id'] ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
+                <input type="hidden" name="slug" value="<?= $sepatu['slug']; ?>">
+                <input type="hidden" name="photoLama" value="<?= $sepatu['gambar']; ?>">
                 <div class="form-group row">
                     <label for="kategori" class="col-sm-2 col-form-label ">Kategori</label>
                     <div class="col-sm-10">
                         <select class="custom-select <?= ($validation->hasError('kategori')) ? 'is-invalid' : '' ?>" id="kategori" name="kategori">
                             <option selected value="" >Kategori</option>
+                            <?php $listK = array() ?>
                             <?php foreach ($kategori as $k) : ?>
-                                <option value="<?= $k['nama_kategori'] ?>" <?= old('kategori') == $k['nama_kategori'] ? 'selected' : '' ?>><?= ucfirst($k['nama_kategori']) ?> </option>
+                                <?php array_push($listK,$k['nama_kategori']); ?>
+                                <option value="<?= $k['nama_kategori'] ?>" <?= old('kategori') ? (old('kategori') == $k['nama_kategori'] ? 'selected' : '') : $sepatu['kategori'] == $k['nama_kategori']  ? 'selected' : '' ?>><?= ucfirst($k['nama_kategori']) ?> </option>
                             <?php endforeach ?>
                         </select>
                         <div class="invalid-feedback">
@@ -32,7 +36,7 @@
                 <div class="form-group row">
                     <label for="nama_sepatu" class="col-sm-2 col-form-label">Nama Sepatu</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('nama_sepatu')) ? 'is-invalid' : '' ?>" id="nama_sepatu" name="nama_sepatu" value="<?= old('nama_sepatu') ?>">
+                        <input type="text" class="form-control <?= ($validation->hasError('nama_sepatu')) ? 'is-invalid' : '' ?>" id="nama_sepatu" name="nama_sepatu" value="<?= old('nama_sepatu') ? old('nama_sepatu') : $sepatu['nama_sepatu']; ?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('nama_sepatu') ?>
                         </div>
@@ -41,7 +45,7 @@
                 <div class="form-group row">
                     <label for="harga" class="col-sm-2 col-form-label">Harga</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" id="harga" name="harga" value="<?= old('harga')?>">
+                        <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" id="harga" name="harga" value="<?= old('harga') ? old('harga') : $sepatu['harga'];?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('harga') ?>
                         </div>
@@ -50,7 +54,7 @@
                 <div class="form-group row">
                     <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : '' ?>" id="deskripsi" name="deskripsi"><?= old('deskripsi')?></textarea>
+                        <textarea class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : '' ?>" id="deskripsi" name="deskripsi"><?= old('deskripsi') ? old('deskripsi') : $sepatu['deskripsi'];?></textarea>
                         <div class="invalid-feedback">
                             <?= $validation->getError('deskripsi') ?>
                         </div>
@@ -59,7 +63,7 @@
                 <div class="form-group row">
                     <label for="photo" class="col-sm-2 col-form-label">Photo</label>
                     <div class="col-sm-2">
-                        <img src="/img/default.png" class="img-thumbnail img-preview">
+                        <img src="/img/<?= $sepatu['gambar']; ?>" class="img-thumbnail img-preview">
                     </div>
                     <div class="col-sm-8">
                         <div class="custom-file">
@@ -67,13 +71,13 @@
                             <div class="invalid-feedback">
                                 <?= $validation->getError('photo') ?>
                             </div>
-                            <label class="custom-file-label" for="photo">Pilih Gambar</label>
+                            <label class="custom-file-label" for="photo"><?= $sepatu['gambar']; ?></label>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary">Tambah Data</button>
+                        <button type="submit" class="btn btn-primary">Edit Data</button>
                     </div>
                 </div>
             </form>

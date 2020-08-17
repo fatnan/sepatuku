@@ -5,8 +5,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
+            <a href="/sepatu/create" class="btn btn-primary mt-3">Tambah Sepatu</a>
             <h1 class="mt-2">Sepatu</h1>
-            <a href="/sepatu/create" class="btn btn-primary mb-3">Tambah Sepatu</a>
+            <?php if(session()->getFlashdata('pesan')) : ?>
+                <div class="alert alert-success" role="alert">
+                    <?= session()->getFlashdata('pesan'); ?>
+                </div>
+            <?php endif; ?>
             <table class="table">
                 <thead>
                     <tr>

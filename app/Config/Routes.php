@@ -40,7 +40,10 @@ $routes->get('/contact', 'Page::contact');
 //sepatu
 $routes->get('/sepatu', 'Sepatu::index');
 $routes->get('/sepatu/create', 'Sepatu::create');
-$routes->get('/sepatu/(:segment)','Sepatu::detail/$1');
+$routes->get('/sepatu/edit/(:segment)', 'Sepatu::edit/$1');
+$routes->post('/sepatu/store','Sepatu::store');
+$routes->delete('/sepatu/(:num)','Sepatu::delete/$1');
+$routes->get('/sepatu/(:any)','Sepatu::detail/$1');
 
 /**
  * --------------------------------------------------------------------

@@ -17,8 +17,14 @@
                                 <p class="card-text"><?= $sepatu['deskripsi']  ?>.</p>
                                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
 
-                                <a href="" class="btn btn-warning">Edit</a>
-                                <a href="" class="btn btn-danger">Delete</a>
+                                <a href="/sepatu/edit/<?= $sepatu['slug']; ?>" class="btn btn-warning">Edit</a>
+
+                                <form action="/sepatu/<?= $sepatu['id']; ?>" method="post" class="d-inline">
+                                    <?= csrf_field(); ?>
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete Sepatu ini?')">Delete</button>
+                                </form>
+
                                 <a href="/sepatu" class="btn btn-success">Back</a>
                             </div>
                         </div>

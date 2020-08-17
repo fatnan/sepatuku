@@ -10,7 +10,13 @@ class SepatuModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-
+        'nama_sepatu',
+        'kode_sepatu',
+        'harga',
+        'deskripsi',
+        'kategori',
+        'slug',
+        'gambar'
     ];
     protected $useTimestamps = true;
 
@@ -21,5 +27,19 @@ class SepatuModel extends Model
         }
 
         return $this->where(['slug' => $slug])->first();
+    }
+
+    public function getIdSepatu()
+    {
+        $sepatu = $this->select('id')->orderBy('id','DESC')->first();
+        return $sepatu['id'];
+    }
+    public function getKodeSepatu($kode_sepatu){
+        $sepatu = $this->select('kode_sepatu')->where('kode_sepatu',$kode_sepatu)->first();
+        if($sepatu) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
