@@ -32,7 +32,9 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 // $routes->get('/', 'Home::index');
 // $routes->get('/', 'Home::index2');
-$routes->get('/', 'Page::index');
+
+$routes->get('/', 'Home::index');
+$routes->get('/login', 'Home::login');
 $routes->get('/about', 'Page::about');
 $routes->get('/contact', 'Page::contact');
 
@@ -44,6 +46,8 @@ $routes->get('/sepatu/edit/(:segment)', 'Sepatu::edit/$1');
 $routes->post('/sepatu/store','Sepatu::store');
 $routes->delete('/sepatu/(:num)','Sepatu::delete/$1');
 $routes->get('/sepatu/(:any)','Sepatu::detail/$1');
+
+//orang
 
 /**
  * --------------------------------------------------------------------

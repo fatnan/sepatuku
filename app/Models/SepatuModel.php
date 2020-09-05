@@ -14,9 +14,11 @@ class SepatuModel extends Model
         'kode_sepatu',
         'harga',
         'deskripsi',
-        'kategori',
+        'id_kategori',
         'slug',
-        'gambar'
+        'gambar',
+        'created_by',
+        'updated_by'
     ];
     protected $useTimestamps = true;
 

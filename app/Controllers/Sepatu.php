@@ -7,14 +7,18 @@ class Sepatu extends BaseController
 {
     protected $sepatuModel;
     public function __construct(){
+        $this->session = session();
         $this->sepatuModel = new SepatuModel();
         $this->kategoriModel = new KategoriModel();
     }
 
     public function index()
 	{
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
-            'title' => 'Sepatu'
+            'title' => 'Sepatu',
+            'username' => ucfirst($this->session->get('username')),
+            'kategori' => $listKategori,
         ];
 
         // cara konek db tanpa model
@@ -30,9 +34,12 @@ class Sepatu extends BaseController
 
     public function detail($slug)
     {
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
             'title' => 'Detail Sepatu',
             'sepatu' => $this->sepatuModel->getSepatu($slug),
+            'username' => ucfirst($this->session->get('username')),
+            'kategori' => $listKategori,
         ];
         if(empty($data['sepatu'])){
             throw new \CodeIgniter\Exceptions\PageNotFoundException('Sepatu '.$slug.' tidak ditemukan.');
@@ -46,7 +53,8 @@ class Sepatu extends BaseController
         $data=[
             'title' => 'Tambah Sepatu',
             'validation'=> \Config\Services::validation(),
-            'kategori' => $listKategori
+            'kategori' => $listKategori,
+            'username' => ucfirst($this->session->get('username'))
         ];
         // dd($data);
         return view('sepatu/create',$data);
@@ -98,7 +106,9 @@ class Sepatu extends BaseController
 
         $slug = url_title($this->request->getVar('nama_sepatu'),'-',true);
         $sepatu = $this->request->getVar();
-        $kategori = $sepatu['kategori'];
+        $id_kategori = $sepatu['kategori'];
+        $kategori_tabel = $this->kategoriModel->find($id_kategori);
+        $kategori = $kategori_tabel['nama_kategori'];
         $kode=$this->sepatuModel->getIdSepatu();
         $kode_table = false;
         //generate kode sepatu
@@ -116,14 +126,16 @@ class Sepatu extends BaseController
                 $kode_table = true;
             }
         }
+        
         $this->sepatuModel->save([
             'nama_sepatu' => $sepatu['nama_sepatu'],
             'kode_sepatu' => $kode_sepatu,
             'harga' => $sepatu['harga'],
             'deskripsi' => $sepatu['deskripsi'],
-            'kategori' => $kategori,
+            'id_kategori' => $id_kategori,
             'slug' => $slug,
-            'gambar' => $namaGambar
+            'gambar' => $namaGambar,
+            'created_by' => $this->session->get('id')
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan');
@@ -149,7 +161,8 @@ class Sepatu extends BaseController
             'title' => 'Edit Sepatu',
             'validation'=> \Config\Services::validation(),
             'sepatu' => $this->sepatuModel->getSepatu($slug),
-            'kategori' => $listKategori
+            'kategori' => $listKategori,
+            'username' => ucfirst($this->session->get('username'))
         ];
         
         return view('sepatu/edit',$data);
@@ -184,7 +197,7 @@ class Sepatu extends BaseController
                 ]
             ]
         ])) {
-            return redirect()->to('/sepatu/create')->withInput();
+            return redirect()->to('/sepatu/edit/'.$this->request->getVar('slug'))->withInput();
             // $validation = \Config\Services::validation();
             // return redirect()->to('/sepatu/edit/'.$this->request->getVar('slug'))->withInput()->with('validation',$validation);
             // $data['validation']=$validation;
@@ -206,7 +219,9 @@ class Sepatu extends BaseController
 
         $slug = url_title($this->request->getVar('nama_sepatu'),'-',true);
         $sepatu = $this->request->getVar();
-        $kategori = $sepatu['kategori'];
+        $id_kategori = $sepatu['kategori'];
+        $kategori_tabel = $this->kategoriModel->find($id_kategori);
+        $kategori = $kategori_tabel['nama_kategori'];
         $kode=$this->sepatuModel->getIdSepatu()+1;
         //generate kode sepatu
         if($kode < 10){
@@ -224,9 +239,10 @@ class Sepatu extends BaseController
             'kode_sepatu' => $kode_sepatu,
             'harga' => $sepatu['harga'],
             'deskripsi' => $sepatu['deskripsi'],
-            'kategori' => $kategori,
+            'id_kategori' => $id_kategori,
             'slug' => $slug,
-            'gambar' => $namaGambar
+            'gambar' => $namaGambar,
+            'updated_by' => $this->session->get('id')
         ]);
 
         session()->setFlashdata('pesan', 'Data berhasil diubah');

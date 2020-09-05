@@ -33,4 +33,63 @@ class Validation
 	//--------------------------------------------------------------------
 	// Rules
 	//--------------------------------------------------------------------
+	public $signup = [
+        'username' => [
+            'rules'  => 'required',
+            'errors' => [
+                'required' => 'You must choose a Username.'
+            ]
+        ],
+        'email'    => [
+            'rules'  => 'required|valid_email',
+            'errors' => [
+                'valid_email' => 'Please check the Email field. It does not appear to be valid.'
+            ]
+        ],
+	];
+	
+	public $register = [
+		'username' => [
+		 'rules' => 'required|min_length[5]|is_unique[user.username]',
+		],
+		'email' => [
+			'rules' => 'required|min_length[5]',
+		   ],
+		'password' => [
+		 'rules' => 'required',
+		],
+		'repeatPassword'=>[
+		 'rules' => 'required|matches[password]',
+		],
+	   ];public $register_errors = [
+		'username' => [
+		 'required' =>'Username Harus Diisi',
+		 'min_length' => 'Username Minimal 5 Karakter',
+		],
+		'email' => [
+			'required' =>'Email Harus Diisi'
+		],
+		'password' => [
+		 'required' => 'Password Harus Diisi',
+		],
+		'repeatPassword'=>[
+		 'required' => 'Retype Password Harus Diisi',
+		 'matches' => 'Retype Password Tidak Match Dengan Password'
+		],
+	   ];public $login = [
+		'username' => [
+		 'rules' => 'required|min_length[5]',
+		],
+		'password' => [
+		 'rules' => 'required',
+		],
+	   ];public $login_errors = [
+		'username' => [
+		 'required' =>'{field} Harus Diisi',
+		 'min_length' => '{field} Minimal 5 Karakter',
+		],
+		'password' => [
+		 'required' => '{field} Harus Diisi',
+		],
+	   ];
 }
