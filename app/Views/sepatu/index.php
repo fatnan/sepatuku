@@ -44,8 +44,10 @@
                 <thead>
                     <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Logo</th>
+                    <th scope="col">Gambar</th>
                     <th scope="col">Nama Sepatu</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Harga</th>
                     <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -56,6 +58,8 @@
                             <th scope="row"><?= $i++; ?></th>
                             <td> <img src="/img/<?= $s['gambar'] ?>" alt="" class="logo-item"> </td>
                             <td><?= $s['nama_sepatu'] ?></td>
+                            <td><?= $s['stock'] ?></td>
+                            <td><?= $s['harga'] ?></td>
                             <td>
                                 <a href="/sepatu/<?= $s['slug'] ?>" class="btn btn-success">Detail</a>
                             </td>

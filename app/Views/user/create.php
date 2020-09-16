@@ -74,6 +74,22 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="form-group row">
+                    <label for="role" class="col-sm-2 col-form-label ">Role</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select <?= ($validation->hasError('role')) ? 'is-invalid' : '' ?>" id="role" name="role">
+                            <option selected value="" >Role</option>
+                            <?php foreach ($role as $r) : ?>
+                                <option value="<?= $r['id'] ?>" <?= old('role') == $r['id'] ? 'selected' : '' ?>><?= ucfirst($r['role']) ?> </option>
+                            <?php endforeach ?>
+                        </select>
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('role') ?>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary">Tambah User</button>

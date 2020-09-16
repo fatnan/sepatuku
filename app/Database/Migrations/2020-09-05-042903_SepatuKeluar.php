@@ -14,13 +14,31 @@ class SepatuKeluar extends Migration
 				'auto_increment'=>TRUE
 			],
 			'id_sepatu' => [
-				'type'			=>	'VARCHAR',
-				'constraint'	=>	'255'
+				'type'			=>	'INT',
+				'constraint'	=>	'11',
+				'unsigned'		=>	TRUE
 			],
 			'total_harga'	=>[
-				'type'			=>	'BIGINT'
+				'type'			=>	'INT',
+				'constraint'	=>  '11'
+			],
+			'size'=>[
+				'type'			=> 'VARCHAR',
+				'constraint'	=> '255'
 			],
 			'slug'	=>[
+				'type'			=>	'VARCHAR',
+				'constraint'	=>	'255',
+				'null'			=> TRUE
+			],
+			'stock'	=>[
+				'type'	=> 'INT',
+				'constraint'	=>11,
+			],
+			'waktu_transaksi'	=>[
+				'type'		=>	'DATETIME'
+			],
+			'status'		=>[
 				'type'			=>	'VARCHAR',
 				'constraint'	=>	'255'
 			],
@@ -44,13 +62,13 @@ class SepatuKeluar extends Migration
 
 		$this->forge->addKey('id', TRUE);
 		$this->forge->addForeignKey('id_sepatu','sepatu','id');
-		$this->forge->createTable('sepatuMasuk');
+		$this->forge->createTable('sepatuKeluar');
 	}
 
 	//--------------------------------------------------------------------
 
 	public function down()
 	{
-		$this->forge->dropTable('sepatuMasuk');
+		$this->forge->dropTable('sepatuKeluar');
 	}
 }

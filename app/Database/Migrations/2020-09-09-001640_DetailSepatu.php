@@ -2,7 +2,7 @@
 
 use CodeIgniter\Database\Migration;
 
-class Kategori extends Migration
+class DetailSepatu extends Migration
 {
 	public function up()
 	{
@@ -13,14 +13,23 @@ class Kategori extends Migration
 				'unsigned'		=>TRUE,
 				'auto_increment'=>TRUE
 			],
-			'nama_kategori'=>[
-				'type' 			=> 'VARCHAR',
-				'constraint'	=> '255'
+			'id_sepatu'=>[
+				'type' 			=> 'INT',
+				'constraint'	=> '255',
+				'unsigned'		=>	TRUE
+
 			],
-			'logo'=>[
+			'size'=>[
 				'type'			=>	'VARCHAR',
 				'constraint'	=>	'255',
-				'null'			=>	TRUE
+			],
+			'stock'=>[
+				'type'			=> 'INT',
+				'constraint'	=> 11
+			],
+			'batch'=>[
+				'type'			=> 'VARCHAR',
+				'constraint'	=> '255'
 			],
 			'created_date'=>[
 				'type' 			=> 'DATETIME',
@@ -33,13 +42,14 @@ class Kategori extends Migration
 		]);
 
 		$this->forge->addKey('id', TRUE);
-		$this->forge->createTable('kategori');
+		$this->forge->addForeignKey('id_sepatu','sepatu','id');
+		$this->forge->createTable('detailsepatu');
 	}
 
 	//--------------------------------------------------------------------
 
 	public function down()
 	{
-		$this->forge->dropTable('kategori');
+		$this->forge->dropTable('detailsepatu');
 	}
 }

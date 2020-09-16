@@ -15,6 +15,21 @@
             <form action="/sepatu/store" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <div class="form-group row">
+                    <label for="merk" class="col-sm-2 col-form-label ">Merk</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select <?= ($validation->hasError('merk')) ? 'is-invalid' : '' ?>" id="merk" name="merk">
+                            <option selected value="" >Merk</option>
+                            <?php foreach ($merk as $m) : ?>
+                                <option value="<?= $m['id'] ?>" <?= old('merk') == $m['id'] ? 'selected' : '' ?>><?= ucfirst($m['nama_merk']) ?> </option>
+                            <?php endforeach ?>
+                        </select>
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('merk') ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label for="kategori" class="col-sm-2 col-form-label ">Kategori</label>
                     <div class="col-sm-10">
                         <select class="custom-select <?= ($validation->hasError('kategori')) ? 'is-invalid' : '' ?>" id="kategori" name="kategori">
@@ -62,6 +77,15 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="form-group row">
+                    <label for="stock" class="col-sm-2 col-form-label">Stock</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control <?//= ($validation->hasError('stock')) ? 'is-invalid' : '' ?>" id="stock" name="stock" value="<?//= old('stock')?>">
+                        <div class="invalid-feedback">
+                            <?//= $validation->getError('stock') ?>
+                        </div>
+                    </div>
+                </div> -->
                 <div class="form-group row">
                     <label for="photo" class="col-sm-2 col-form-label">Photo</label>
                     <div class="col-sm-2">

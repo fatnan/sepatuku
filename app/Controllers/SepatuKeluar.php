@@ -2,18 +2,14 @@
 
 use App\Models\SepatuModel;
 use App\Models\MerkModel;
-use App\Models\KategoriModel;
-use App\Models\SepatuMasukModel;
 
-class Sepatu extends BaseController
+class SepatuKeluar extends BaseController
 {
     protected $sepatuModel;
     public function __construct(){
         $this->session = session();
         $this->sepatuModel = new SepatuModel();
         $this->merkModel = new MerkModel();
-        $this->kategoriModel = new KategoriModel();
-        $this->sepatuMasukModel = new SepatuMasukModel();
     }
 
     public function index()
@@ -26,7 +22,7 @@ class Sepatu extends BaseController
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
-        
+
         // cara konek db tanpa model
         // $db = \Config\Database::connect();
         // $sepatu = $db->query("SELECT * FROM sepatu");
@@ -58,12 +54,10 @@ class Sepatu extends BaseController
     public function create()
     {
         $listMerk = $this->merkModel->getMerk();
-        $listKategori = $this->kategoriModel->getKategori();
         $data=[
             'title' => 'Tambah Sepatu',
             'validation'=> \Config\Services::validation(),
             'merk' => $listMerk,
-            'kategori'  => $listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
@@ -85,7 +79,6 @@ class Sepatu extends BaseController
             ],
             'harga' => 'required|numeric',
             'merk' => 'required',
-            'deskripsi' => 'required',
             'photo' => [
                 'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
                 'errors' => [
@@ -94,10 +87,14 @@ class Sepatu extends BaseController
                     'is_image' => 'File yang anda upload bukan gambar',
                     'mime_in' => 'File yang anda upload bukan gambar (jpg,jpeg,png)'
                 ]
-            ],
-            // 'stock' => 'required|numeric'
+            ]
         ])) {
             return redirect()->to('/sepatu/create')->withInput();
+
+            // $validation = \Config\Services::validation();
+            // return redirect()->to('/sepatu/create')->withInput()->with('validation',$validation);
+            // $data['validation']=$validation;
+            // return view('/sepatu/create',$data);
         }
 
         // ambil gambar
@@ -136,25 +133,16 @@ class Sepatu extends BaseController
             }
         }
         
-        $sepatuBaru=$this->sepatuModel->save([
+        $this->sepatuModel->save([
             'nama_sepatu' => $sepatu['nama_sepatu'],
             'kode_sepatu' => $kode_sepatu,
             'harga' => $sepatu['harga'],
             'deskripsi' => $sepatu['deskripsi'],
             'id_merk' => $id_merk,
-            'id_kategori'   => $sepatu['kategori'],
             'slug' => $slug,
             'gambar' => $namaGambar,
-            'created_by' => $this->session->get('id'),
-            // 'stock' => $sepatu['stock']
+            'created_by' => $this->session->get('id')
         ]);
-
-        
-        // $this->sepatuMasukModel->save([
-        //     'id_sepatu' => $sepatuBaru['id'],
-        //     'total_harga'   => $sepatuBaru['stock'] * $sepatuBaru['harga'],
-        //     'waktu_transaksi'   => $sepatuBaru['created_at'],
-        // ]);
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan');
 

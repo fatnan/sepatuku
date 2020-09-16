@@ -13,16 +13,31 @@ class SepatuMasuk extends Migration
 				'unsigned'		=>TRUE,
 				'auto_increment'=>TRUE
 			],
-			'id_sepatu' => [
-				'type'			=>	'VARCHAR',
-				'constraint'	=>	'255'
+			'id_sepatu'	=>[
+				'type'			=>	'INT',
+				'constraint'	=>	'11',
+				'unsigned'		=>	TRUE
 			],
 			'total_harga'	=>[
-				'type'			=>	'BIGINT'
+				'type'			=>	'INT',
+				'constraint'	=>  '11',
+				'default'		=> 0
+			],
+			'size'=>[
+				'type'			=> 'VARCHAR',
+				'constraint'	=> '255'
 			],
 			'slug'	=>[
 				'type'			=>	'VARCHAR',
-				'constraint'	=>	'255'
+				'constraint'	=>	'255',
+				'null'			=> TRUE
+			],
+			'stock'	=>[
+				'type'	=> 'INT',
+				'constraint'	=>11,
+			],
+			'waktu_transaksi'	=>[
+				'type'		=>	'DATETIME'
 			],
 			'created_by'=>[
 				'type' => 'INT',

@@ -1,11 +1,12 @@
 <?php namespace App\Controllers;
 
 use App\Models\SepatuModel;
+use App\Models\SepatuMasukModel;
 use App\Models\MerkModel;
 use App\Models\KategoriModel;
-use App\Models\SepatuMasukModel;
+use App\Models\DetailSepatuModel;
 
-class Sepatu extends BaseController
+class SepatuMasuk extends BaseController
 {
     protected $sepatuModel;
     public function __construct(){
@@ -14,28 +15,26 @@ class Sepatu extends BaseController
         $this->merkModel = new MerkModel();
         $this->kategoriModel = new KategoriModel();
         $this->sepatuMasukModel = new SepatuMasukModel();
+        $this->detailSepatuModel = new DetailSepatuModel();
     }
 
     public function index()
 	{
         $listMerk = $this->merkModel->getMerk();
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
-            'title' => 'Sepatu',
+            'title' => 'Sepatu Masuk',
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
-        
-        // cara konek db tanpa model
-        // $db = \Config\Database::connect();
-        // $sepatu = $db->query("SELECT * FROM sepatu");
-        // foreach($sepatu->getResultArray() as $row){
-        //     d($row);
-        // }
 
-        $data['sepatu'] = $this->sepatuModel->getSepatu();
-		return view('sepatu/index',$data);
+        $allsepatumasuk = $this->sepatuMasukModel->getSepatuMasuk();
+        $data['sepatumasuk']=$this->sepatuMasukModel->sepatu($allsepatumasuk);
+        
+		return view('sepatumasuk/index',$data);
     }
 
     public function detail($slug)
@@ -58,107 +57,89 @@ class Sepatu extends BaseController
     public function create()
     {
         $listMerk = $this->merkModel->getMerk();
-        $listKategori = $this->kategoriModel->getKategori();
+        $listSepatu = $this->sepatuModel->getSepatu();
         $data=[
-            'title' => 'Tambah Sepatu',
+            'title' => 'Tambah Sepatu Masuk',
             'validation'=> \Config\Services::validation(),
             'merk' => $listMerk,
-            'kategori'  => $listKategori,
+            'sepatu'=> $listSepatu,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
         // dd($data);
-        return view('sepatu/create',$data);
+        return view('sepatumasuk/create',$data);
     }
 
     public function store(){
         //validation
         if(!$this->validate([
-            'nama_sepatu' => [
-                'rules' => 'required|min_length[3]|is_unique[sepatu.nama_sepatu]',
-                'errors' => [
-                    // 'required' => '{field} nama sepatu harus diisi.',
-                    'required' => 'Nama sepatu harus diisi.',
-                    'is_unique' => 'Nama sepatu sudah terdaftar'
-                ]
-            ],
-            'harga' => 'required|numeric',
             'merk' => 'required',
-            'deskripsi' => 'required',
-            'photo' => [
-                'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
-                'errors' => [
-                    // 'uploaded' => 'Pilih gambar terlebih dahulu',
-                    'max_size' => 'Ukuran gambar terlalu besar',
-                    'is_image' => 'File yang anda upload bukan gambar',
-                    'mime_in' => 'File yang anda upload bukan gambar (jpg,jpeg,png)'
-                ]
-            ],
-            // 'stock' => 'required|numeric'
+            'sepatu'    => 'required',
+            'size'  => 'required|numeric|less_than[50]',
+            'harga' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'waktu_transaksi'   =>'required'
         ])) {
-            return redirect()->to('/sepatu/create')->withInput();
-        }
+            return redirect()->to('/sepatumasuk/create')->withInput();
 
-        // ambil gambar
-        $filePhoto = $this->request->getFile('photo');
-        //cek ada foto atau tidak
-        if($filePhoto->getError() == 4){
-            $namaGambar = 'default.png';
-        }else{
-            //generate nama photo random
-            $namaGambar = $filePhoto->getRandomName();
-            $filePhoto->move('img',$namaGambar);
+            // $validation = \Config\Services::validation();
+            // return redirect()->to('/sepatu/create')->withInput()->with('validation',$validation);
+            // $data['validation']=$validation;
+            // return view('/sepatu/create',$data);
         }
+        $total_harga = $this->request->getVar('harga') * $this->request->getVar('stock');
 
-        // $namaGambar = $filePhoto->getName();
-
-        $slug = url_title($this->request->getVar('nama_sepatu'),'-',true);
-        $sepatu = $this->request->getVar();
-        $id_merk = $sepatu['merk'];
-        $merk_tabel = $this->merkModel->find($id_merk);
-        $merk = $merk_tabel['nama_merk'];
-        $kode=$this->sepatuModel->getIdSepatu();
-        $kode_table = false;
-        //generate kode sepatu
-        while(!$kode_table){
-            $kode++;
-            if($kode < 10){
-                $kode_gen = "000".$kode;
-            } elseif($kode<100){
-                $kode_gen = "00".$kode;
-            } else{
-                $kode_gen = "0".$kode;
-            }
-            $kode_sepatu = strtoupper($merk[0])."-".$kode_gen;
-            if($this->sepatuModel->getKodeSepatu($kode_sepatu)){
-                $kode_table = true;
-            }
-        }
-        
-        $sepatuBaru=$this->sepatuModel->save([
-            'nama_sepatu' => $sepatu['nama_sepatu'],
-            'kode_sepatu' => $kode_sepatu,
-            'harga' => $sepatu['harga'],
-            'deskripsi' => $sepatu['deskripsi'],
-            'id_merk' => $id_merk,
-            'id_kategori'   => $sepatu['kategori'],
-            'slug' => $slug,
-            'gambar' => $namaGambar,
+        $this->sepatuMasukModel->save([
+            'id_sepatu' => $this->request->getVar('sepatu'),
+            'total_harga'   => $total_harga,
+            'size' => $this->request->getVar('size'),
+            'stock' => $this->request->getVar('stock'),
+            'waktu_transaksi' => $this->request->getVar('waktu_transaksi'),
+            'created_at' => date('Y-m-d h:i:s'),
             'created_by' => $this->session->get('id'),
-            // 'stock' => $sepatu['stock']
         ]);
-
         
-        // $this->sepatuMasukModel->save([
-        //     'id_sepatu' => $sepatuBaru['id'],
-        //     'total_harga'   => $sepatuBaru['stock'] * $sepatuBaru['harga'],
-        //     'waktu_transaksi'   => $sepatuBaru['created_at'],
-        // ]);
+        $month=date("m",strtotime($this->request->getVar('waktu_transaksi')));
+        $year=date("Y",strtotime($this->request->getVar('waktu_transaksi')));
+        if($month <= 3) {
+            $batch = "1-".$year;
+        }
+        else if($month <= 6 ) {
+            $batch = "2-".$year;
+        } else{
+            $batch = "3-".$year;
+        }
+
+        if($this->detailSepatuModel->where([
+                'id_sepatu'=>$this->request->getVar('sepatu'),
+                'size'=>  $this->request->getVar('size'),
+                'batch'=>   $batch
+            ])->first()){
+            $detailSepatu=$this->detailSepatuModel->where(['id_sepatu'=>$this->request->getVar('sepatu'),'size'=>  $this->request->getVar('size')])->first();
+            $this->detailSepatuModel->save([
+                'id'=>$detailSepatu['id'],
+                'stock'=>$detailSepatu['stock'] + $this->request->getVar('stock')
+            ]);
+        }else{
+            $this->detailSepatuModel->save([
+                'id_sepatu' => $this->request->getVar('sepatu'),
+                'size'  => $this->request->getVar('size'),
+                'stock'=> $this->request->getVar('stock'),
+                'batch' => $batch,
+                'created_date' => date('Y-m-d h:i:s'),
+            ]);
+        }
+        $sepatu = $this->sepatuModel->find($this->request->getVar('sepatu'));
+        $this->sepatuModel->save([
+            'id'    => $this->request->getVar('sepatu'),
+            'stock'=> $sepatu['stock'] + $this->request->getVar('stock')
+        ]);
+        
 
         session()->setFlashdata('pesan', 'Data berhasil ditambahkan');
 
-        return redirect()->to('/sepatu');
+        return redirect()->to('/sepatumasuk');
     }
 
     public function delete($id){

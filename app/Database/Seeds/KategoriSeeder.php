@@ -8,28 +8,32 @@ class KategoriSeeder extends \CodeIgniter\Database\Seeder
         {
                 $data = [
                     [
-                        'nama_kategori'=> 'Adidas',
-                        'logo'=> null,
+                        'nama_kategori'=> 'Sepatu Lari',
                         'created_date'=> Time::now(),
                         'updated_date'=> Time::now()
                     ],
                     [
-                        'nama_kategori'=> 'Nike',
-                        'logo'=> null,
+                        'nama_kategori'=> 'Sepatu Futsal',
+                        'created_date'=> Time::now(),
+                        'updated_date'=> Time::now()
+                    ],
+                    [
+                        'nama_kategori'=> 'Sepatu Casual',
+                        'created_date'=> Time::now(),
+                        'updated_date'=> Time::now()
+                    ],
+                    [
+                        'nama_kategori'=> 'Sepatu Pria',
+                        'created_date'=> Time::now(),
+                        'updated_date'=> Time::now()
+                    ],
+                    [
+                        'nama_kategori'=> 'Sepatu Wanita',
                         'created_date'=> Time::now(),
                         'updated_date'=> Time::now()
                     ],
                 ];
                 
-                // $faker = \Faker\Factory::create('id_ID');
-                // for($i=0; $i<100;$i++){
-                //     $data = [
-                //         'nama'          => $faker->name,
-                //         'alamat'        => $faker->address,
-                //         'created_at'    => Time::createFromTimestamp($faker->unixTime()),
-                //         'updated_at'    => Time::now()
-                //     ];
-                // }
                 $this->db->table('kategori')->insertBatch($data);
                 
         }

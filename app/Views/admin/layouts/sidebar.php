@@ -15,7 +15,7 @@
           <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?= $username ?></a>
+          <a href="#" class="d-block"><?= $user_login->username ?></a>
         </div>
       </div>
 
@@ -27,14 +27,14 @@
           <!-- <li class="nav-item has-treeview menu-open"> -->
           <li class="nav-item has-treeview">
             <a href="/sepatu" class="nav-link <?= $title == 'Sepatu' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-box"></i>
+              <i class="nav-icon fas fa-socks"></i>
               <p>
                 Sepatu
                 <!-- <i class="right fas fa-angle-left"></i> -->
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview menu-close">
+          <!-- <li class="nav-item has-treeview menu-close">
             <a href="/sepatu" class="nav-link">
               <i class="nav-icon fas fa-box"></i>
               <p>
@@ -42,32 +42,34 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Masuk</p>
+            <ul class="nav nav-treeview"> -->
+              <li class="nav-item has-treeview ">
+                <a href="/sepatumasuk" class="nav-link <?= $title == 'Sepatu Masuk' ? 'active' : '' ?>">
+                  <i class="fas fa-sign-in-alt nav-icon"></i>
+                  <p>Sepatu Masuk</p>
                 </a>
               </li>
-            </ul>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Data Keluar</p>
+            <!-- </ul>
+            <ul class="nav nav-treeview"> -->
+              <li class="nav-item has-treeview">
+                <a href="/sepatukeluar" class="nav-link <?= $title == 'Sepatu Keluar' ? 'active' : '' ?>">
+                  <i class="fas fa-sign-out-alt nav-icon"></i>
+                  <p>Sepatu Keluar</p>
                 </a>
               </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="/user" class="nav-link <?= $title == 'User' ? 'active' : '' ?>">
-              <i class="nav-icon fas fa-user-circle"></i>
-              <p>
-                User
-                <!-- <span class="right badge badge-danger">New</span> -->
-              </p>
-            </a>
-          </li>
+            <!-- </ul>
+          </li> -->
+          <?php if($user_login->id_role == 1) : ?>
+            <li class="nav-item">
+              <a href="/user" class="nav-link <?= $title == 'User' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-user-circle"></i>
+                <p>
+                  User
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+            </li>
+            <?php endif ?>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

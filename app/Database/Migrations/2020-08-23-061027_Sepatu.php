@@ -27,6 +27,11 @@ class Sepatu extends Migration
 			'deskripsi'	=>[
 				'type'			=> 'TEXT'
 			],
+			'id_merk'	=>[
+				'type'			=>	'INT',
+				'constraint'	=>	'11',
+				'unsigned'		=>	TRUE
+			],
 			'id_kategori'	=>[
 				'type'			=>	'INT',
 				'constraint'	=>	'11',
@@ -39,6 +44,11 @@ class Sepatu extends Migration
 			'gambar'=>[
 				'type'			=>	'VARCHAR',
 				'constraint'	=>	'255'
+			],
+			'stock'	=>[
+				'type'			=> 'INT',
+				'constaint'		=>	'11',
+				'default'		=> '0'
 			],
 			'created_by'=>[
 				'type' => 'INT',
@@ -59,6 +69,7 @@ class Sepatu extends Migration
 		]);
 
 		$this->forge->addKey('id', TRUE);
+		$this->forge->addForeignKey('id_merk','merk','id');
 		$this->forge->addForeignKey('id_kategori','kategori','id');
 		$this->forge->createTable('sepatu');
 	}

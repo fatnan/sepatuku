@@ -11,18 +11,18 @@
                 <input type="hidden" name="slug" value="<?= $sepatu['slug']; ?>">
                 <input type="hidden" name="photoLama" value="<?= $sepatu['gambar']; ?>">
                 <div class="form-group row">
-                    <label for="kategori" class="col-sm-2 col-form-label ">Kategori</label>
+                    <label for="merk" class="col-sm-2 col-form-label ">Merk</label>
                     <div class="col-sm-10">
-                        <select class="custom-select <?= ($validation->hasError('kategori')) ? 'is-invalid' : '' ?>" id="kategori" name="kategori">
-                            <option selected value="" >Kategori</option>
+                        <select class="custom-select <?= ($validation->hasError('merk')) ? 'is-invalid' : '' ?>" id="merk" name="merk">
+                            <option selected value="" >Merk</option>
                             <?php $listK = array() ?>
-                            <?php foreach ($kategori as $k) : ?>
-                                <?php array_push($listK,$k['nama_kategori']); ?>
-                                <option value="<?= $k['nama_kategori'] ?>" <?= old('kategori') ? (old('kategori') == $k['nama_kategori'] ? 'selected' : '') : $sepatu['kategori'] == $k['nama_kategori']  ? 'selected' : '' ?>><?= ucfirst($k['nama_kategori']) ?> </option>
+                            <?php foreach ($merk as $k) : ?>
+                                <?php array_push($listK,$k['nama_merk']); ?>
+                                <option value="<?= $k['nama_merk'] ?>" <?= old('merk') ? (old('merk') == $k['nama_merk'] ? 'selected' : '') : $sepatu['merk'] == $k['nama_merk']  ? 'selected' : '' ?>><?= ucfirst($k['nama_merk']) ?> </option>
                             <?php endforeach ?>
                         </select>
                         <div class="invalid-feedback">
-                            <?= $validation->getError('kategori') ?>
+                            <?= $validation->getError('merk') ?>
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,14 @@
 <?php namespace App\Controllers;
 
 use App\Models\BarangModel;
-use App\Models\KategoriModel;
+use App\Models\MerkModel;
 
 class Barang extends BaseController
 {
     protected $barangModel;
     public function __construct(){
         $this->barangModel = new barangModel();
-        $this->kategoriModel = new KategoriModel();
+        $this->merkModel = new MerkModel();
     }
 
     public function index()
@@ -42,11 +42,11 @@ class Barang extends BaseController
 
     public function create()
     {
-        $listKategori = $this->kategoriModel->getKategori();
+        $listMerk = $this->merkModel->getMerk();
         $data=[
             'title' => 'Tambah Barang',
             'validation'=> \Config\Services::validation(),
-            'kategori' => $listKategori
+            'merk' => $listMerk
         ];
         // dd($data);
         return view('barang/create',$data);
@@ -64,7 +64,7 @@ class Barang extends BaseController
                 ]
             ],
             'harga' => 'required|numeric',
-            'kategori' => 'required',
+            'merk' => 'required',
             'photo' => [
                 'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
                 'errors' => [
@@ -98,7 +98,7 @@ class Barang extends BaseController
 
         $slug = url_title($this->request->getVar('nama_barang'),'-',true);
         $barang = $this->request->getVar();
-        $kategori = $barang['kategori'];
+        $merk = $barang['merk'];
         $kode=$this->barangModel->getIdBarang();
         $kode_table = false;
         //generate kode barang
@@ -111,7 +111,7 @@ class Barang extends BaseController
             } else{
                 $kode_gen = "0".$kode;
             }
-            $kode_barang = strtoupper($kategori[0])."-".$kode_gen;
+            $kode_barang = strtoupper($merk[0])."-".$kode_gen;
             if($this->barangModel->getKodeBarang($kode_barang)){
                 $kode_table = true;
             }
@@ -121,7 +121,7 @@ class Barang extends BaseController
             'kode_barang' => $kode_barang,
             'harga' => $barang['harga'],
             'deskripsi' => $barang['deskripsi'],
-            'kategori' => $kategori,
+            'merk' => $merk,
             'slug' => $slug,
             'gambar' => $namaGambar
         ]);
@@ -144,12 +144,12 @@ class Barang extends BaseController
     }
 
     public function edit($slug){
-        $listKategori = $this->kategoriModel->getKategori();
+        $listMerk = $this->merkModel->getMerk();
         $data=[
             'title' => 'Edit Barang',
             'validation'=> \Config\Services::validation(),
             'barang' => $this->barangModel->getBarang($slug),
-            'kategori' => $listKategori
+            'merk' => $listMerk
         ];
         
         return view('barang/edit',$data);
@@ -173,7 +173,7 @@ class Barang extends BaseController
                 ]
             ],
             'harga' => 'required|numeric',
-            'kategori' => 'required',
+            'merk' => 'required',
             'photo' => [
                 'rules' => 'max_size[photo,2048]|is_image[photo]|mime_in[photo,image/jpg,image/jpeg,image/png]',
                 'errors' => [
@@ -206,7 +206,7 @@ class Barang extends BaseController
 
         $slug = url_title($this->request->getVar('nama_barang'),'-',true);
         $barang = $this->request->getVar();
-        $kategori = $barang['kategori'];
+        $merk = $barang['merk'];
         $kode=$this->barangModel->getIdBarang()+1;
         //generate kode barang
         if($kode < 10){
@@ -216,7 +216,7 @@ class Barang extends BaseController
         } else{
             $kode = "0".$kode;
         }
-        $kode_barang = strtoupper($kategori[0])."-".$kode;
+        $kode_barang = strtoupper($merk[0])."-".$kode;
         
         $this->barangModel->save([
             'id' => $id,        //untuk menandakan edit
@@ -224,7 +224,7 @@ class Barang extends BaseController
             'kode_barang' => $kode_barang,
             'harga' => $barang['harga'],
             'deskripsi' => $barang['deskripsi'],
-            'kategori' => $kategori,
+            'merk' => $merk,
             'slug' => $slug,
             'gambar' => $namaGambar
         ]);

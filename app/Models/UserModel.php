@@ -7,12 +7,12 @@ class UserModel extends Model
 	protected $table = 'user';
 	protected $primaryKey = 'id';
 	protected $allowedFields = [
-		'username','email','avatar','password','salt','created_date','created_by','updated_date','updated_by'
+		'username','email','name','avatar','password','salt','id_role','created_date','created_by','updated_date','updated_by'
 	];
 	protected $returnType = 'App\Entities\User';
 	protected $useTimestamps = false;
 
 	public function search($keyword){
-        return $this->table('orang')->like('name',$keyword);
+        return $this->table('user')->like('name',$keyword);
     }
 }

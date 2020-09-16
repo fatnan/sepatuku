@@ -14,7 +14,7 @@ class BarangModel extends Model
         'kode_barang',
         'harga',
         'deskripsi',
-        'kategori',
+        'merk',
         'slug',
         'gambar'
     ];

@@ -14,11 +14,13 @@ class SepatuModel extends Model
         'kode_sepatu',
         'harga',
         'deskripsi',
+        'id_merk',
         'id_kategori',
         'slug',
         'gambar',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'stock'
     ];
     protected $useTimestamps = true;
 
@@ -43,5 +45,9 @@ class SepatuModel extends Model
         } else {
             return true;
         }
+    }
+    public function getNamaSepatu($id)
+    {
+        return $this->where(['id' => $id])->first();
     }
 }

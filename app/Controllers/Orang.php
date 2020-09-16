@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Models\OrangModel;
-use App\Models\KategoriModel;
+use App\Models\MerkModel;
 
 
 class Orang extends BaseController
@@ -10,8 +10,8 @@ class Orang extends BaseController
     public function __construct(){
         $this->session = session();
         $this->orangModel = new OrangModel();
-        $this->kategoriModel = new KategoriModel();
-        $this->listKategori = $this->kategoriModel->getKategori();
+        $this->merkModel = new MerkModel();
+        $this->listMerk = $this->merkModel->getMerk();
     }
 
     public function index()
@@ -34,7 +34,7 @@ class Orang extends BaseController
             'current_page' => $currentPage,
             'data_perpage' => $data_perpage,
             'username' => ucfirst($this->session->get('username')),
-            'kategori'  => $this->listKategori
+            'merk'  => $this->listMerk
         ];
         
 		return view('orang/index',$data);

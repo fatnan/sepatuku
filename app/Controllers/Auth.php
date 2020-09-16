@@ -1,5 +1,7 @@
 <?php namespace App\Controllers;
 
+use App\Models\RoleModel;
+
 class Auth extends BaseController
 {
 	public function __construct()
@@ -73,6 +75,8 @@ class Auth extends BaseController
 					$sessData = [
 						'username' => $user->username,
 						'id' => $user->id,
+						'role' => $user->id_role,
+						'user_login' => $user,
 						'isLoggedIn' => TRUE
 					];
 

@@ -47,7 +47,21 @@ $routes->post('/sepatu/store','Sepatu::store');
 $routes->delete('/sepatu/(:num)','Sepatu::delete/$1');
 $routes->get('/sepatu/(:any)','Sepatu::detail/$1');
 
-//orang
+//sepatu masuk
+$routes->get('/sepatumasuk', 'SepatuMasuk::index');
+$routes->get('/sepatumasuk/create', 'SepatuMasuk::create');
+$routes->get('/sepatumasuk/edit/(:segment)', 'SepatuMasuk::edit/$1');
+$routes->post('/sepatumasuk/store','SepatuMasuk::store');
+$routes->delete('/sepatumasuk/(:num)','SepatuMasuk::delete/$1');
+$routes->get('/sepatumasuk/(:any)','SepatuMasuk::detail/$1');
+
+//user
+$routes->get('/user', 'User::index');
+$routes->get('/user/create', 'User::create');
+$routes->get('/user/edit/(:segment)', 'User::edit/$1');
+$routes->post('/user/store','User::store');
+$routes->delete('/user/delete/(:num)','User::delete/$1');
+$routes->get('/user/(:any)','User::detail/$1');
 
 /**
  * --------------------------------------------------------------------

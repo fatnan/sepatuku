@@ -10,4 +10,12 @@ class RoleModel extends Model
 		'role','previlege','created_date','updated_date'
 	];
 	protected $useTimestamps = false;
+	public function getRole($id = 0)
+    {
+        if($id == 0){
+            return $this->findAll();
+        }
+
+        return $this->where(['id' => $id])->first();
+    }
 }

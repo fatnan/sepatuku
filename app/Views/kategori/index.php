@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-10"></div>
             <div class="col-2">
-                <a href="/sepatu/create" class="btn btn-primary mb-3">Tambah Kategori</a>
+                <a href="/sepatu/create" class="btn btn-primary mb-3">Tambah merk</a>
             </div>
         </div>
             <?php if(session()->getFlashdata('pesan')) : ?>
@@ -29,7 +29,7 @@
                     <tr>
                     <th scope="col">No</th>
                     <th scope="col">Logo</th>
-                    <th scope="col">Nama Kategori</th>
+                    <th scope="col">Nama merk</th>
                     <th scope="col">Action</th>
                     </tr>
                 </thead>

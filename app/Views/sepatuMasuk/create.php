@@ -12,19 +12,34 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <form action="/sepatu/store" method="post" enctype="multipart/form-data">
+            <form action="/sepatumasuk/store" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <div class="form-group row">
-                    <label for="kategori" class="col-sm-2 col-form-label ">Kategori</label>
+                    <label for="merk" class="col-sm-2 col-form-label ">Merk</label>
                     <div class="col-sm-10">
-                        <select class="custom-select <?= ($validation->hasError('kategori')) ? 'is-invalid' : '' ?>" id="kategori" name="kategori">
-                            <option selected value="" >Kategori</option>
-                            <?php foreach ($kategori as $k) : ?>
-                                <option value="<?= $k['id'] ?>" <?= old('kategori') == $k['id'] ? 'selected' : '' ?>><?= ucfirst($k['nama_kategori']) ?> </option>
+                        <select class="custom-select <?= ($validation->hasError('merk')) ? 'is-invalid' : '' ?>" id="merk" name="merk">
+                            <option selected value="" >Merk</option>
+                            <?php foreach ($merk as $k) : ?>
+                                <option value="<?= $k['id'] ?>" <?= old('merk') == $k['id'] ? 'selected' : '' ?>><?= ucfirst($k['nama_merk']) ?> </option>
                             <?php endforeach ?>
                         </select>
                         <div class="invalid-feedback">
-                            <?= $validation->getError('kategori') ?>
+                            <?= $validation->getError('merk') ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sepatu" class="col-sm-2 col-form-label ">Sepatu</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select <?= ($validation->hasError('sepatu')) ? 'is-invalid' : '' ?>" id="sepatu" name="sepatu">
+                            <option selected value="" >Sepatu</option>
+                            <?php foreach ($sepatu as $s) : ?>
+                                <option value="<?= $s['id'] ?>" <?= old('sepatu') == $s['id'] ? 'selected' : '' ?>><?= ucfirst($s['nama_sepatu']) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('sepatu') ?>
                         </div>
                     </div>
                 </div>
@@ -36,11 +51,11 @@
                     </div>
                 </div> -->
                 <div class="form-group row">
-                    <label for="nama_sepatu" class="col-sm-2 col-form-label">Nama Sepatu</label>
+                    <label for="size" class="col-sm-2 col-form-label">Size</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('nama_sepatu')) ? 'is-invalid' : '' ?>" id="nama_sepatu" name="nama_sepatu" value="<?= old('nama_sepatu') ?>">
+                        <input type="text" class="form-control <?= ($validation->hasError('size')) ? 'is-invalid' : '' ?>" id="size" name="size" maxlength="2" value="<?= old('size') ?>">
                         <div class="invalid-feedback">
-                            <?= $validation->getError('nama_sepatu') ?>
+                            <?= $validation->getError('size') ?>
                         </div>
                     </div>
                 </div>
@@ -54,26 +69,20 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
+                    <label for="stock" class="col-sm-2 col-form-label">Jumlah</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : '' ?>" id="deskripsi" name="deskripsi"><?= old('deskripsi')?></textarea>
+                        <input type="text" class="form-control <?= ($validation->hasError('stock')) ? 'is-invalid' : '' ?>" id="stock" name="stock" maxlength="4" value="<?= old('stock')?>">
                         <div class="invalid-feedback">
-                            <?= $validation->getError('deskripsi') ?>
+                            <?= $validation->getError('stock') ?>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="photo" class="col-sm-2 col-form-label">Photo</label>
-                    <div class="col-sm-2">
-                        <img src="/img/default.png" class="img-thumbnail img-preview">
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input <?= ($validation->hasError('photo')) ? 'is-invalid' : '' ?>" id="photo" name="photo" onchange="previewImg()">
-                            <div class="invalid-feedback">
-                                <?= $validation->getError('photo') ?>
-                            </div>
-                            <label class="custom-file-label" for="photo">Pilih Gambar</label>
+                    <label for="waktu_transaksi" class="col-sm-2 col-form-label">Tanggal Masuk</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control <?= ($validation->hasError('waktu_transaksi')) ? 'is-invalid' : '' ?>" id="waktu_transaksi" name="waktu_transaksi"><?= old('waktu_transaksi')?></input>
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('waktu_transaksi') ?>
                         </div>
                     </div>
                 </div>
@@ -86,5 +95,21 @@
         </div>
     </div>
 </div>
+
+<script>
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+ if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("waktu_transaksi").setAttribute("max", today);
+</script>
 
 <?= $this->endSection(); ?>

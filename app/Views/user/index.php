@@ -50,7 +50,7 @@
                             <td><?= $u->name ?></td>
                             
                             <td>
-                                <a href="" class="btn btn-success">Detail</a>
+                                <a href="user/<?= $u->id ?>" class="btn btn-success">Detail</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

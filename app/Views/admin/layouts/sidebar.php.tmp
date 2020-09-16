@@ -33,12 +33,12 @@
                 <!-- <i class="right fas fa-angle-left"></i> -->
               </p>
             </a>
-            <!-- <?php foreach($kategori as $k) : ?>
+            <!-- <?php foreach($merk as $k) : ?>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/kategori/<?= $k['nama_kategori']; ?>" class="nav-link <?= $title == ucfirst($k['nama_kategori']) ? 'active' : '' ?>">
+                  <a href="/merk/<?= $k['nama_merk']; ?>" class="nav-link <?= $title == ucfirst($k['nama_merk']) ? 'active' : '' ?>">
                     <i class="far fa-circle nav-icon"></i>
-                    <p><?= ucfirst($k['nama_kategori']) ?></p>
+                    <p><?= ucfirst($k['nama_merk']) ?></p>
                   </a>
                 </li>
               </ul>
