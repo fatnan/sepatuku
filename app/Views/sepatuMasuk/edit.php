@@ -12,25 +12,39 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <h2 class="my-3">Edit Sepatu</h2>
-            
-            <form action="/sepatu/update/<?= $sepatu['id'] ?>" method="post" enctype="multipart/form-data">
+            <form action="/sepatumasuk/update/<?= $sepatu['id_sepatumasuk'] ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
-                <input type="hidden" name="slug" value="<?= $sepatu['slug']; ?>">
-                <input type="hidden" name="photoLama" value="<?= $sepatu['gambar']; ?>">
+                <input type="hidden" name="merkLama" value="<?= $sepatu['id_merk']; ?>">
+                <input type="hidden" name="sepatuLama" value="<?= $sepatu['id']; ?>">
+                <input type="hidden" name="sizeLama" value="<?= $sepatu['size']; ?>">
+                <input type="hidden" name="stockLama" value="<?= $sepatu['stock']; ?>">
+                
                 <div class="form-group row">
                     <label for="merk" class="col-sm-2 col-form-label ">Merk</label>
                     <div class="col-sm-10">
                         <select class="custom-select <?= ($validation->hasError('merk')) ? 'is-invalid' : '' ?>" id="merk" name="merk">
                             <option selected value="" >Merk</option>
-                            <?php $listK = array() ?>
                             <?php foreach ($merk as $k) : ?>
-                                <?php array_push($listK,$k['nama_merk']); ?>
                                 <option value="<?= $k['id'] ?>" <?= old('merk') ? (old('merk') == $k['id'] ? 'selected' : '') : $sepatu['id_merk'] == $k['id']  ? 'selected' : '' ?>><?= ucfirst($k['nama_merk']) ?> </option>
                             <?php endforeach ?>
                         </select>
                         <div class="invalid-feedback">
                             <?= $validation->getError('merk') ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="sepatu" class="col-sm-2 col-form-label ">Sepatu</label>
+                    <div class="col-sm-10">
+                        <select class="custom-select <?= ($validation->hasError('sepatu')) ? 'is-invalid' : '' ?>" id="sepatu" name="sepatu">
+                            <option selected value="" >Sepatu</option>
+                            <?php foreach ($listsepatu as $s) : ?>
+                                <option value="<?= $s['id'] ?>" <?= old('sepatu') ? (old('sepatu') == $s['id'] ? 'selected' : '') : $sepatu['id'] == $s['id']  ? 'selected' : '' ?>><?= ucfirst($s['nama_sepatu']) ?></option>
+                            <?php endforeach ?>
+                        </select>
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('sepatu') ?>
                         </div>
                     </div>
                 </div>
@@ -42,11 +56,11 @@
                     </div>
                 </div> -->
                 <div class="form-group row">
-                    <label for="nama_sepatu" class="col-sm-2 col-form-label">Nama Sepatu</label>
+                    <label for="size" class="col-sm-2 col-form-label">Size</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('nama_sepatu')) ? 'is-invalid' : '' ?>" id="nama_sepatu" name="nama_sepatu" value="<?= old('nama_sepatu') ? old('nama_sepatu') : $sepatu['nama_sepatu']; ?>">
+                        <input type="text" class="form-control <?= ($validation->hasError('size')) ? 'is-invalid' : '' ?>" id="size" name="size" maxlength="2" value="<?= old('size') ? old('size') : $sepatu['size']; ?>">
                         <div class="invalid-feedback">
-                            <?= $validation->getError('nama_sepatu') ?>
+                            <?= $validation->getError('size') ?>
                         </div>
                     </div>
                 </div>
@@ -60,37 +74,47 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
+                    <label for="stock" class="col-sm-2 col-form-label">Jumlah</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control <?= ($validation->hasError('deskripsi')) ? 'is-invalid' : '' ?>" id="deskripsi" name="deskripsi"><?= old('deskripsi') ? old('deskripsi') : $sepatu['deskripsi'];?></textarea>
+                        <input type="text" class="form-control <?= ($validation->hasError('stock')) ? 'is-invalid' : '' ?>" id="stock" name="stock" maxlength="4" value="<?= old('stock') ? old('stock') : $sepatu['stock'];?>">
                         <div class="invalid-feedback">
-                            <?= $validation->getError('deskripsi') ?>
+                            <?= $validation->getError('stock') ?>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="photo" class="col-sm-2 col-form-label">Photo</label>
-                    <div class="col-sm-2">
-                        <img src="/img/<?= $sepatu['gambar']; ?>" class="img-thumbnail img-preview">
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input <?= ($validation->hasError('photo')) ? 'is-invalid' : '' ?>" id="photo" name="photo" onchange="previewImg()">
-                            <div class="invalid-feedback">
-                                <?= $validation->getError('photo') ?>
-                            </div>
-                            <label class="custom-file-label" for="photo"><?= $sepatu['gambar']; ?></label>
+                    <label for="waktu_transaksi" class="col-sm-2 col-form-label">Tanggal Masuk</label>
+                    <div class="col-sm-10">
+                        <input type="date" class="form-control <?= ($validation->hasError('waktu_transaksi')) ? 'is-invalid' : '' ?>" id="waktu_transaksi" name="waktu_transaksi" value = <?= old('waktu_transaksi') ? old('waktu_transaksi') : $sepatu['waktu_transaksi'];?> >
+                        <div class="invalid-feedback">
+                            <?= $validation->getError('waktu_transaksi') ?>
                         </div>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <button type="submit" class="btn btn-primary">Edit Data</button>
+                        <button type="submit" class="btn btn-primary">Ubah Data</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
+ if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+
+today = yyyy+'-'+mm+'-'+dd;
+document.getElementById("waktu_transaksi").setAttribute("max", today);
+</script>
 
 <?= $this->endSection(); ?>

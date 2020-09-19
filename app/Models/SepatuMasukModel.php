@@ -22,13 +22,17 @@ class SepatuMasukModel extends Model
     ];
     protected $useTimestamps = true;
 
-    public function getSepatuMasuk($slug = false)
+    public function getSepatuMasuk($id = false)
     {
-        if($slug == false){
+        if($id == false){
             return $this->findAll();
         }
-
-        return $this->where(['slug' => $slug])->first();
+        $sepatu = $this->db->table('sepatumasuk')
+            ->select('sepatumasuk.id AS id_sepatumasuk,sepatumasuk.total_harga,sepatumasuk.size,sepatumasuk.stock,sepatumasuk.waktu_transaksi,sepatu.gambar,sepatu.nama_sepatu,sepatu.slug,sepatu.id,sepatu.id_merk')
+            ->where(['sepatumasuk.id'=>$id])
+            ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
+            ->get()->getResultArray(); 
+        return $sepatu[0];
     }
 
     public function getIdSepatu($id_sepatu)
@@ -46,5 +50,14 @@ class SepatuMasukModel extends Model
         }
         return $allsepatu;
 
+    }
+
+    public function getExportSepatuMasuk()
+    {
+        $sepatu = $this->db->table('sepatumasuk')
+            ->select('sepatumasuk.id AS id_sepatumasuk,sepatumasuk.total_harga,sepatumasuk.size,sepatumasuk.stock,sepatumasuk.waktu_transaksi,sepatu.gambar,sepatu.nama_sepatu,sepatu.slug,sepatu.id,sepatu.id_merk')
+            ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
+            ->get()->getResultArray(); 
+        return $sepatu[0];
     }
 }

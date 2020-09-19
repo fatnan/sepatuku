@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <a href="/kategori/create" class="btn btn-primary mb-3">Tambah Kategori</a>
+            <a href="/merk/create" class="btn btn-primary mb-3">Tambah Merk</a>
         </div>
         <div class="col-6">
             <!-- <h1 class="mt-2">Daftar Orang</h1> -->
@@ -44,23 +44,25 @@
                 <thead>
                     <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Nama Kategori</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Nama Merk</th>
                     <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($kategori as $s) : ?>
+                    <?php foreach ($merk as $s) : ?>
                         <tr>
                             <th scope="row"><?= $i++; ?></th>
-                            <td><?= $s['nama_kategori'] ?></td>
+                            <td> <img src="/img/<?= $s['logo'] ?>" alt="" class="logo-item"> </td>
+                            <td><?= $s['nama_merk'] ?></td>
                             <td>
-                                <a href="/kategori/<?= $s['id'] ?>" class="btn btn-success">Detail</a>
-                                <a href="/kategori/edit/<?= $s['id'] ?>" class="btn btn-success">Edit</a>
-                                <form action="/kategori/delete/<?= $s['id']; ?>" method="post" class="d-inline">
+                                <a href="/merk/<?= $s['id'] ?>" class="btn btn-success">Detail</a>
+                                <a href="/merk/edit/<?= $s['id'] ?>" class="btn btn-success">Edit</a>
+                                <form action="/merk/delete/<?= $s['id']; ?>" method="post" class="d-inline">
                                     <?= csrf_field(); ?>
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete Kategori ini?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete Merk ini?')">Delete</button>
                                 </form>
                             </td>
                         </tr>

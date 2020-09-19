@@ -11,12 +11,11 @@
 <?= $this->section('content'); ?>
 
 <div class="container">
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-6">
-            <a href="/kategori/create" class="btn btn-primary mb-3">Tambah Kategori</a>
+            <a href="/sepatu/create" class="btn btn-primary mb-3">Tambah Sepatu</a>
         </div>
         <div class="col-6">
-            <!-- <h1 class="mt-2">Daftar Orang</h1> -->
             <form action="" method="get">
                 <div class="input-group mb-3 float-right">
                     <input type="text" class="form-control" placeholder="Masukan keyword pencarian.." name='keyword'>
@@ -25,7 +24,7 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </div> -->
     </div>
     <div class="row">
         <div class="col">
@@ -44,25 +43,21 @@
                 <thead>
                     <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Nama Kategori</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Nama Sepatu</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Batch</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($kategori as $s) : ?>
+                    <?php foreach ($sepatu as $s) : ?>
                         <tr>
                             <th scope="row"><?= $i++; ?></th>
-                            <td><?= $s['nama_kategori'] ?></td>
-                            <td>
-                                <a href="/kategori/<?= $s['id'] ?>" class="btn btn-success">Detail</a>
-                                <a href="/kategori/edit/<?= $s['id'] ?>" class="btn btn-success">Edit</a>
-                                <form action="/kategori/delete/<?= $s['id']; ?>" method="post" class="d-inline">
-                                    <?= csrf_field(); ?>
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete Kategori ini?')">Delete</button>
-                                </form>
-                            </td>
+                            <td><?= $s['nama_sepatu'] ?></td>
+                            <td><?= $s['detailstock'] ?></td>
+                            <td><?= $s['size'] ?></td>
+                            <td><?= $s['batch'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

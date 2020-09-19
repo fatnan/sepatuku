@@ -28,6 +28,7 @@ class Auth extends BaseController
 
 				$user->username = $this->request->getPost('username');
 				$user->password = $this->request->getPost('password');
+				$user->name = $this->request->getPost('username');
 				$user->email = $this->request->getPost('email');
 				$user->avatar = "avatar_default.jpg";
 
@@ -82,7 +83,7 @@ class Auth extends BaseController
 
 					$this->session->set($sessData);
 					
-					return redirect()->to('/sepatu');
+					return redirect()->to('/dashboard');
 				}
 			}else{
 				$this->session->setFlashdata('errors', ['User Tidak Ditemukan']);

@@ -13,7 +13,8 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <a href="/sepatu/create" class="btn btn-primary mb-3">Tambah Sepatu</a>
+            <a href="/sepatukeluar/create" class="btn btn-primary mb-3">Tambah Sepatu Keluar</a>
+            <a href="/sepatukeluar/export" class="btn btn-success mb-3">Export</a>
         </div>
         <div class="col-6">
             <!-- <h1 class="mt-2">Daftar Orang</h1> -->
@@ -44,20 +45,26 @@
                 <thead>
                     <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Logo</th>
                     <th scope="col">Nama Sepatu</th>
+                    <th scope="col">Batch</th>
+                    <th scope="col">Waktu Transaksi</th>
+                    <th scope="col">Jumlah</th>
+                    <th scope="col">Total Harga</th>
                     <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1; ?>
-                    <?php foreach ($sepatu as $s) : ?>
+                    <?php foreach ($sepatukeluar as $s) : ?>
                         <tr>
                             <th scope="row"><?= $i++; ?></th>
-                            <td> <img src="/img/<?= $s['gambar'] ?>" alt="" class="logo-item"> </td>
                             <td><?= $s['nama_sepatu'] ?></td>
+                            <td><?= $s['batch'] ?></td>
+                            <td> <?= date('d M Y',strtotime($s['waktu_transaksi'])) ?> </td>
+                            <td> <?= $s['stock'] ?> </td>
+                            <td> <?= $s['total_harga'] ?> </td>
                             <td>
-                                <a href="/sepatu/<?= $s['slug'] ?>" class="btn btn-success">Detail</a>
+                                <a href="/sepatukeluar/<?= $s['id'] ?>" class="btn btn-success">Detail</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

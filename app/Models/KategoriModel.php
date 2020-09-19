@@ -11,9 +11,10 @@ class KategoriModel extends Model
 
     protected $allowedFields = [
         'nama_kategori',
-        'jumlah'
+        'created_date',
+        'updated_date'
     ];
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
 
     public function getKategori($id = 0)
     {
@@ -28,5 +29,11 @@ class KategoriModel extends Model
     {
         $kategori = $this->select('kategori')->orderBy('id','DESC')->first();
         return $kategori['id'];
+    }
+    public function countAllKategori(){
+        $kategori = $this->db->table('kategori')
+            ->select('*');
+        $countKategori=$kategori->countAllResults();
+        return $countKategori;
     }
 }

@@ -14,6 +14,7 @@
     <div class="row">
         <div class="col-6">
             <a href="/sepatumasuk/create" class="btn btn-primary mb-3">Tambah Sepatu Masuk</a>
+            <a href="/sepatukeluar/export" class="btn btn-success mb-3">Export</a>
         </div>
         <div class="col-6">
             <!-- <h1 class="mt-2">Daftar Orang</h1> -->
@@ -61,7 +62,7 @@
                             <td> <?= $s['stock'] ?> </td>
                             <td> <?= $s['total_harga'] ?> </td>
                             <td>
-                                <a href="/sepatu/<?= $s['slug'] ?>" class="btn btn-success">Detail</a>
+                                <a href="/sepatumasuk/<?= $s['id'] ?>" class="btn btn-success">Detail</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

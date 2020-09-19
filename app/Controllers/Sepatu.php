@@ -33,17 +33,25 @@ class Sepatu extends BaseController
         // foreach($sepatu->getResultArray() as $row){
         //     d($row);
         // }
-
-        $data['sepatu'] = $this->sepatuModel->getSepatu();
+        
+        //search
+        $keyword = $this->request->getVar('keyword');
+        if($keyword){
+            $data['sepatu'] = $this->sepatuModel->search($keyword)->find();
+        } else{
+            $data['sepatu'] = $this->sepatuModel->getSepatu();
+        }
+        
 		return view('sepatu/index',$data);
     }
 
     public function detail($slug)
     {
         $listMerk = $this->merkModel->getMerk();
+        $sepatu = $this->sepatuModel->getSepatu($slug);
         $data = [
-            'title' => 'Detail Sepatu',
-            'sepatu' => $this->sepatuModel->getSepatu($slug),
+            'title' => $sepatu['nama_sepatu'],
+            'sepatu' => $sepatu,
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
             'roleId' => $this->session->get('role'),
@@ -234,7 +242,9 @@ class Sepatu extends BaseController
             $namaGambar = $filePhoto->getRandomName();
             $filePhoto->move('img',$namaGambar);
             //hapus file lama
-            unlink('img/'.$photoLama);
+            if($photoLama != 'default.png'){
+                unlink('img/'.$photoLama);
+            }
         }
 
         $slug = url_title($this->request->getVar('nama_sepatu'),'-',true);

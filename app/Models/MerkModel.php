@@ -11,9 +11,11 @@ class MerkModel extends Model
 
     protected $allowedFields = [
         'nama_merk',
-        'jumlah'
+        'logo',
+        'created_date',
+        'updated_date'
     ];
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
 
     public function getMerk($id = 0)
     {
@@ -28,5 +30,11 @@ class MerkModel extends Model
     {
         $merk = $this->select('merk')->orderBy('id','DESC')->first();
         return $merk['id'];
+    }
+    public function countAllMerk(){
+        $merk = $this->db->table('merk')
+            ->select('*');
+        $countMerk=$merk->countAllResults();
+        return $countMerk;
     }
 }

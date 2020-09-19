@@ -12,7 +12,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="/img/<?= $user_login->avatar ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block"><?= $user_login->username ?></a>
@@ -25,6 +25,33 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <!-- <li class="nav-item has-treeview menu-open"> -->
+          <li class="nav-item has-treeview">
+            <a href="/dashboard" class="nav-link <?= $title == 'Dashboard' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Dashboard
+                <!-- <i class="right fas fa-angle-left"></i> -->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="/merk" class="nav-link <?= $title == 'Merk' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Merk
+                <!-- <i class="right fas fa-angle-left"></i> -->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="/kategori" class="nav-link <?= $title == 'Kategori' ? 'active' : '' ?>">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Kategori
+                <!-- <i class="right fas fa-angle-left"></i> -->
+              </p>
+            </a>
+          </li>
           <li class="nav-item has-treeview">
             <a href="/sepatu" class="nav-link <?= $title == 'Sepatu' ? 'active' : '' ?>">
               <i class="nav-icon fas fa-socks"></i>
@@ -59,6 +86,15 @@
               </li>
             <!-- </ul>
           </li> -->
+            <li class="nav-item has-treeview">
+              <a href="/detailsepatu" class="nav-link <?= $title == 'Detail Sepatu' ? 'active' : '' ?>">
+                <i class="nav-icon fas fa-socks"></i>
+                <p>
+                  Detail Sepatu
+                  <!-- <i class="right fas fa-angle-left"></i> -->
+                </p>
+              </a>
+            </li>
           <?php if($user_login->id_role == 1) : ?>
             <li class="nav-item">
               <a href="/user" class="nav-link <?= $title == 'User' ? 'active' : '' ?>">
@@ -69,7 +105,7 @@
                 </p>
               </a>
             </li>
-            <?php endif ?>
+          <?php endif ?>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

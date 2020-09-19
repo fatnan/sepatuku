@@ -14,5 +14,11 @@ class UserModel extends Model
 
 	public function search($keyword){
         return $this->table('user')->like('name',$keyword);
+	}
+	public function countAllUser(){
+        $user = $this->db->table('user')
+            ->select('*');
+        $countUser=$user->countAllResults();
+        return $countUser;
     }
 }

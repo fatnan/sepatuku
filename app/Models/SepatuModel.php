@@ -50,4 +50,15 @@ class SepatuModel extends Model
     {
         return $this->where(['id' => $id])->first();
     }
+    
+    public function search($keyword){
+        return $this->table('sepatu')->like('nama_sepatu',$keyword);
+    }
+
+    public function countAllSepatu(){
+        $sepatu = $this->db->table('sepatu')
+            ->select('*');
+        $countSepatu=$sepatu->countAllResults();
+        return $countSepatu;
+    }
 }
