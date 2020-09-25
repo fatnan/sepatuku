@@ -38,6 +38,8 @@
                                 <option value="<?= $s['id'] ?>" <?= old('sepatu') == $s['id'] ? 'selected' : '' ?>><?= ucfirst($s['nama_sepatu']) ?></option>
                             <?php endforeach ?>
                         </select>
+                        <input type="hidden" name="sepatu_text" id="sepatu_text" value="<?= old('sepatu_text') ? old('sepatu_text') : '' ?>">
+                        <input type="hidden" name="harga_text" id="harga_text" value="<?= old('harga_text') ? old('harga_text') : '' ?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('sepatu') ?>
                         </div>
@@ -115,12 +117,78 @@ document.getElementById("waktu_transaksi").setAttribute("max", today);
 
 <script type="text/javascript">
         $(document).ready(function(){
+            let old_merk = "<?php echo old('merk') ? old('merk') : '' ?>";
+            let old_sepatu_id = "<?php echo old('sepatu') ? old('sepatu') : '' ?>";
+            let old_sepatu_text = "<?php echo old('sepatu_text') ? old('sepatu_text') : '' ?>";
+            let old_harga_text = "<?php echo old('harga_text') ? old('harga_text') : '' ?>";
+            $('#sepatu').select2({
+                placeholder: "--Pilih--"
+            });
+
             $('#sepatu').attr('disabled',true);
+
+            if(old_merk != ''){
+                var merk_id = $('#merk').val();
+                $('#sepatu').attr('disabled',false);
+                getSepatu(merk_id,old_sepatu_id,old_sepatu_text,old_harga_text);
+            }
             $('#merk').change(function() {
                 if($(this).val()){
+                    var merk_id = $('#merk').val();
+                    getSepatu(merk_id);
                     $('#sepatu').attr('disabled',false);
                 }
             })
+            $('#sepatu').change(function() {
+                if($(this).val()){
+                    let sepatu= $('#sepatu').select2('data');
+                    $('#sepatu_text').val(sepatu[0].text);
+                    $('#harga_text').val(sepatu[0].harga);
+                }
+            })
+            function getSepatu(id,old_id, old_text,old_harga) {
+                route ="<?php echo base_url('sepatukeluar/combosepatu') ?>";
+                $("#sepatu").select2({
+                    placeholder: "--Pilih--",
+                    ajax: {
+                        url: route,
+                        dataType: 'json',
+                        type: "POST",
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                merk_id: id
+                            };
+                        },
+                        // results: function (data, page) {
+                        //     return { results: data.results };
+                        // }
+                        processResults: function(data){
+                            console.log(data);
+                            return {
+                                results: data
+                            };
+                        },
+                        cache: true
+                    },
+                    formatAjaxError:function(a,b,c){return"Not Found .."}
+                });
+
+                if((typeof old_id !== 'undefined') && (typeof old_text !== 'undefined') && (typeof old_harga !== 'undefined')){
+                    // create the option and append to Select2
+                    var option = new Option(old_text, old_id, true, true);
+                    $('#sepatu').append(option).trigger('change');
+
+                    const data = {id: old_id, text: old_text,harga:old_harga};
+                    // manually trigger the `select2:select` event
+                    $('#sepatu').trigger({
+                        type: 'select2:select',
+                        params: {
+                            data: data
+                        }
+                    });
+                }
+            }
         });
     </script>
 

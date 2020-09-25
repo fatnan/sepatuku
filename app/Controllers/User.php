@@ -2,6 +2,7 @@
 
 use App\Models\UserModel;
 use App\Models\MerkModel;
+use App\Models\KategoriModel;
 use App\Models\RoleModel;
 
 
@@ -13,7 +14,9 @@ class User extends BaseController
         $this->userModel = new UserModel();
         $this->roleModel = new RoleModel();
         $this->merkModel = new MerkModel();
+        $this->kategoriModel = new KategoriModel();
         $this->listMerk = $this->merkModel->getMerk();
+        $this->listKategori = $this->kategoriModel->getKategori();
     }
 
     public function index(){
@@ -35,6 +38,7 @@ class User extends BaseController
             'data_perpage' => $data_perpage,
             'username' => ucfirst($this->session->get('username')),
             'merk'  => $this->listMerk,
+            'kategori' => $this->listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
@@ -50,6 +54,7 @@ class User extends BaseController
             'user' => $this->userModel->find($id),
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $this->listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
@@ -68,6 +73,7 @@ class User extends BaseController
             'validation'=> \Config\Services::validation(),
             'role' => $listRole,
             'merk' => $listMerk,
+            'kategori' => $this->listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
@@ -160,6 +166,7 @@ class User extends BaseController
             'user' => $this->userModel->find($id),
             'role' => $listRole,
             'merk' => $listMerk,
+            'kategori' => $this->listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')

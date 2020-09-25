@@ -11,21 +11,30 @@
 <?= $this->section('content'); ?>
 
 <div class="container">
-    <div class="row">
-        <div class="col-6">
-            <a href="/sepatumasuk/create" class="btn btn-primary mb-3">Tambah Sepatu Masuk</a>
-            <a href="/sepatukeluar/export" class="btn btn-success mb-3">Export</a>
-        </div>
-        <div class="col-6">
-            <!-- <h1 class="mt-2">Daftar Orang</h1> -->
-            <form action="" method="get">
-                <div class="input-group mb-3 float-right">
-                    <input type="text" class="form-control" placeholder="Masukan keyword pencarian.." name='keyword'>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit" name="submit">Cari</button>
+    <div class="container box">
+        <div class="row">
+            <div class="col-md-7">
+                <a href="/sepatumasuk/create" class="btn btn-primary mb-3">Tambah Sepatu Masuk</a>
+                <!-- <a href="/sepatumasuk/export" class="btn btn-success mb-3">Export</a>  -->
+            </div>
+            <div class="col-md-5">
+                <form method="post" action="/sepatumasuk/export">
+                    <div class="form-row">
+                        <div class="form-row input-daterange">
+                            <div class="col-md-6">
+                                <input type="date" name="start_date" class="form-control"  />
+                            </div>
+                            <div class="col-md-6">
+                                <input type="date" name="end_date" class="form-control"  />
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" name="export" value="Export" class="btn btn-info" />
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -71,4 +80,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('.input-daterange').datepicker({
+            todayBtn:'linked',
+            format: "yyyy-mm-dd",
+            autoclose: true
+        });
+    });
+</script>
 <?= $this->endSection(); ?>

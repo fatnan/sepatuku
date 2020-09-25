@@ -25,7 +25,7 @@ class SepatuMasukModel extends Model
     public function getSepatuMasuk($id = false)
     {
         if($id == false){
-            return $this->findAll();
+            return $this->orderBy('waktu_transaksi','DESC')->findAll();
         }
         $sepatu = $this->db->table('sepatumasuk')
             ->select('sepatumasuk.id AS id_sepatumasuk,sepatumasuk.total_harga,sepatumasuk.size,sepatumasuk.stock,sepatumasuk.waktu_transaksi,sepatu.gambar,sepatu.nama_sepatu,sepatu.slug,sepatu.id,sepatu.id_merk')
@@ -52,12 +52,80 @@ class SepatuMasukModel extends Model
 
     }
 
-    public function getExportSepatuMasuk()
+    public function getExportSepatuMasuk($startdate=null,$enddate=null)
     {
-        $sepatu = $this->db->table('sepatumasuk')
-            ->select('sepatumasuk.id AS id_sepatumasuk,sepatumasuk.total_harga,sepatumasuk.size,sepatumasuk.stock,sepatumasuk.waktu_transaksi,sepatu.gambar,sepatu.nama_sepatu,sepatu.slug,sepatu.id,sepatu.id_merk')
+        if($startdate==null && $enddate==null){
+            $sepatu = $this->db->table('sepatumasuk')
+            ->select('
+            sepatumasuk.id AS id_sepatumasuk,
+            sepatumasuk.total_harga,
+            sepatumasuk.size,
+            sepatumasuk.stock,
+            sepatumasuk.waktu_transaksi,
+            sepatu.gambar,
+            sepatu.nama_sepatu,
+            sepatu.slug,
+            sepatu.id,
+            sepatu.id_merk
+            ')
             ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
             ->get()->getResultArray(); 
-        return $sepatu[0];
+        return $sepatu;
+        } else if($startdate == null) {
+            $sepatu = $this->db->table('sepatumasuk')
+                ->select('
+                sepatumasuk.id AS id_sepatumasuk,
+                sepatumasuk.total_harga,
+                sepatumasuk.size,
+                sepatumasuk.stock,
+                sepatumasuk.waktu_transaksi,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
+                ->where('waktu_transaksi <',$enddate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        } else if($enddate == null){
+            $sepatu = $this->db->table('sepatumasuk')
+                ->select('
+                sepatumasuk.id AS id_sepatumasuk,
+                sepatumasuk.total_harga,
+                sepatumasuk.size,
+                sepatumasuk.stock,
+                sepatumasuk.waktu_transaksi,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
+                ->where('waktu_transaksi >',$startdate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        } else {
+            $sepatu = $this->db->table('sepatumasuk')
+                ->select('
+                sepatumasuk.id AS id_sepatumasuk,
+                sepatumasuk.total_harga,
+                sepatumasuk.size,
+                sepatumasuk.stock,
+                sepatumasuk.waktu_transaksi,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatumasuk.id_sepatu')
+                ->where('waktu_transaksi >',$startdate)
+                ->where('waktu_transaksi <',$enddate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        }
     }
 }

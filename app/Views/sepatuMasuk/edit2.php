@@ -12,13 +12,12 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-            <form action="/sepatukeluar/update/<?= $sepatu['id_sepatukeluar'] ?>" method="post" enctype="multipart/form-data">
+            <form action="/sepatumasuk/update/<?= $sepatu['id_sepatumasuk'] ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <input type="hidden" name="merkLama" value="<?= $sepatu['id_merk']; ?>">
                 <input type="hidden" name="sepatuLama" value="<?= $sepatu['id']; ?>">
                 <input type="hidden" name="sizeLama" value="<?= $sepatu['size']; ?>">
                 <input type="hidden" name="stockLama" value="<?= $sepatu['stock']; ?>">
-                <input type="hidden" name="batchLama" value="<?= $sepatu['batch']; ?>">
                 
                 <div class="form-group row">
                     <label for="merk" class="col-sm-2 col-form-label ">Merk</label>
@@ -66,16 +65,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="size" class="col-sm-2 col-form-label">Batch</label>
+                    <label for="harga" class="col-sm-2 col-form-label">Harga</label>
                     <div class="col-sm-10">
-                        <select class="custom-select <?= ($validation->hasError('batch')) ? 'is-invalid' : '' ?>" id="batch" name="batch">
-                            <option selected value="" >Batch</option>
-                            <?php foreach ($listbatch as $lb) : ?>
-                                <option value="<?= $lb['batch'] ?>" <?= old('batch') ? (old('batch') == $lb['batch'] ? 'selected' : '') : $sepatu['batch'] == $lb['batch']  ? 'selected' : '' ?>><?= $lb['batch'] ?></option>
-                            <?php endforeach ?>
-                        </select>
+                        <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" id="harga" name="harga" value="<?= old('harga') ? old('harga') : $sepatu['harga'];?>">
                         <div class="invalid-feedback">
-                            <?= $validation->getError('batch') ?>
+                            <?= $validation->getError('harga') ?>
                         </div>
                     </div>
                 </div>
@@ -89,38 +83,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="diskon" class="col-sm-2 col-form-label">Diskon</label>
-                    <div class="col-sm-10">
-                        <input type="number" class="form-control <?= ($validation->hasError('diskon')) ? 'is-invalid' : '' ?>" id="diskon" name="diskon" maxlength="4" value="<?= old('diskon') ? old('diskon') : $sepatu['diskon'] ?>">
-                        <div class="invalid-feedback">
-                            <?= $validation->getError('diskon') ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="harga" class="col-sm-2 col-form-label">Harga</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('harga')) ? 'is-invalid' : '' ?>" id="harga" name="harga" value="<?= old('harga') ? old('harga') : $sepatu['harga'];?>">
-                        <div class="invalid-feedback">
-                            <?= $validation->getError('harga') ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="waktu_transaksi" class="col-sm-2 col-form-label">Tanggal Keluar</label>
+                    <label for="waktu_transaksi" class="col-sm-2 col-form-label">Tanggal Masuk</label>
                     <div class="col-sm-10">
                         <input type="date" class="form-control <?= ($validation->hasError('waktu_transaksi')) ? 'is-invalid' : '' ?>" id="waktu_transaksi" name="waktu_transaksi" value = <?= old('waktu_transaksi') ? old('waktu_transaksi') : $sepatu['waktu_transaksi'];?> >
                         <div class="invalid-feedback">
                             <?= $validation->getError('waktu_transaksi') ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="keterangan" class="col-sm-2 col-form-label">Keterangan</label>
-                    <div class="col-sm-10">
-                        <textarea class="form-control <?= ($validation->hasError('keterangan')) ? 'is-invalid' : '' ?>" id="keterangan" name="keterangan"><?= old('keterangan')?><?= $sepatu['keterangan'] ?></textarea>
-                        <div class="invalid-feedback">
-                            <?= $validation->getError('keterangan') ?>
                         </div>
                     </div>
                 </div>

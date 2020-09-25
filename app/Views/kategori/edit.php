@@ -13,12 +13,12 @@
     <div class="row">
         <div class="col-8">
             
-            <form action="/kategori/update/<?= $kategori['id'] ?>" method="post" enctype="multipart/form-data">
+            <form action="/kategori/update/<?= $kategoriNow['id'] ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field(); ?>
                 <div class="form-group row">
                     <label for="nama_kategori" class="col-sm-2 col-form-label">Nama Kategori</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control <?= ($validation->hasError('nama_kategori')) ? 'is-invalid' : '' ?>" id="nama_kategori" name="nama_kategori" value="<?= old('nama_kategori') ? old('nama_kategori') : $kategori['nama_kategori'];?>">
+                        <input type="text" class="form-control <?= ($validation->hasError('nama_kategori')) ? 'is-invalid' : '' ?>" id="nama_kategori" name="nama_kategori" value="<?= old('nama_kategori') ? old('nama_kategori') : $kategoriNow['nama_kategori'];?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('nama_kategori') ?>
                         </div>

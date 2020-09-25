@@ -34,23 +34,55 @@
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="/merk" class="nav-link <?= $title == 'Merk' ? 'active' : '' ?>">
+          <li class="nav-item has-treeview <?= isset($yesMerk) ? 'menu-open' : '' ?>">
+            <a href="/merk" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Merk
-                <!-- <i class="right fas fa-angle-left"></i> -->
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/merk" class="nav-link <?= $title == 'Merk' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Merk</p>
+                </a>
+              </li>
+              <?php foreach($merk as $m) :  ?>
+              <li class="nav-item">
+                <a href="/merk/<?= $m['id'] ?>" class="nav-link <?= $title == ucfirst($m['nama_merk']) ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p><?= $m['nama_merk'] ?></p>
+                </a>
+              </li>
+              <?php endforeach ?>
+            </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="/kategori" class="nav-link <?= $title == 'Kategori' ? 'active' : '' ?>">
+          <li class="nav-item has-treeview <?= isset($yesKategori) ? 'menu-open' : '' ?>">
+            <a href="/kategori" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>
                 Kategori
-                <!-- <i class="right fas fa-angle-left"></i> -->
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/kategori" class="nav-link <?= $title == 'Kategori' ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Kategori</p>
+                </a>
+              </li>
+              <?php foreach($kategori as $k) :  ?>
+              <li class="nav-item">
+                <a href="/kategori/<?= $k['id'] ?>" class="nav-link <?= $title == ucfirst($k['nama_kategori']) ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p><?= $k['nama_kategori'] ?></p>
+                </a>
+              </li>
+              <?php endforeach ?>
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="/sepatu" class="nav-link <?= $title == 'Sepatu' ? 'active' : '' ?>">

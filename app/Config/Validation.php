@@ -52,6 +52,9 @@ class Validation
 		'username' => [
 		 'rules' => 'required|min_length[5]|is_unique[user.username]',
 		],
+		'name' => [
+			'rules' => 'required|min_length[3]'
+		],
 		'email' => [
 			'rules' => 'required|min_length[5]',
 		   ],
@@ -65,6 +68,10 @@ class Validation
 		'username' => [
 		 'required' =>'Username Harus Diisi',
 		 'min_length' => 'Username Minimal 5 Karakter',
+		],
+		'name' => [
+			'required' => 'Full Name Harus Diisi',
+			'min_length' => 'Full Name minimal 3'
 		],
 		'email' => [
 			'required' =>'Email Harus Diisi'

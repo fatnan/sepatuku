@@ -61,4 +61,25 @@ class SepatuModel extends Model
         $countSepatu=$sepatu->countAllResults();
         return $countSepatu;
     }
+
+    public function getSepatuPerMerk($id_merk){
+        $sepatu = $this->table('sepatu')->where('id_merk',$id_merk)->findAll();
+        return $sepatu;
+    }
+
+    public function getSepatuPerKategori($id_kategori){
+        $sepatu = $this->table('sepatu')->where('id_kategori',$id_kategori)->findAll();
+        return $sepatu;
+    }
+
+    // public function comboSepatu($params)
+    // {
+    //     return static::select('id as id', 'nama_sepatu as text')
+    //                     ->where([
+    //                         ['nama_sepatu','LIKE','%'.$params['search'].'%'],
+    //                         ['id_merk',$params['id_merk']],
+    //                         ])
+    //                     ->get()
+    //                     ->toArray();
+    // }
 }

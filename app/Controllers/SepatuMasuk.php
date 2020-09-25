@@ -5,6 +5,8 @@ use App\Models\SepatuMasukModel;
 use App\Models\MerkModel;
 use App\Models\KategoriModel;
 use App\Models\DetailSepatuModel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class SepatuMasuk extends BaseController
 {
@@ -41,11 +43,13 @@ class SepatuMasuk extends BaseController
     {
         $listMerk = $this->merkModel->getMerk();
         $sepatu = $this->sepatuMasukModel->getSepatuMasuk($id);
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
             'title' => $sepatu['nama_sepatu'],
             'sepatu' => $sepatu,
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
@@ -60,10 +64,12 @@ class SepatuMasuk extends BaseController
     {
         $listMerk = $this->merkModel->getMerk();
         $listSepatu = $this->sepatuModel->getSepatu();
+        $listKategori = $this->kategoriModel->getKategori();
         $data=[
             'title' => 'Tambah Sepatu Masuk',
             'validation'=> \Config\Services::validation(),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'sepatu'=> $listSepatu,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
@@ -145,26 +151,28 @@ class SepatuMasuk extends BaseController
     }
 
     public function delete($id){
-        //cari gambar berdasasrkan id
-        $sepatu = $this->sepatuModel->find($id);
-        // delete gambar
-        if($sepatu['gambar'] != 'default.png'){
-            unlink('img/'.$sepatu['gambar']);
-        }
-        $this->sepatuModel->delete($id);
-        session()->setFlashdata('pesan', 'Data berhasil dihapus');
-        return redirect()->to('/sepatu');
+        // //cari gambar berdasasrkan id
+        // $sepatu = $this->sepatuModel->find($id);
+        // // delete gambar
+        // if($sepatu['gambar'] != 'default.png'){
+        //     unlink('img/'.$sepatu['gambar']);
+        // }
+        // $this->sepatuModel->delete($id);
+        // session()->setFlashdata('pesan', 'Data berhasil dihapus');
+        // return redirect()->to('/sepatu');
     }
 
     public function edit($id){
         $listMerk = $this->merkModel->getMerk();
         $listSepatu = $this->sepatuModel->getSepatu();
+        $listKategori = $this->kategoriModel->getKategori();
         $data=[
             'title' => 'Edit Sepatu Masuk',
             'validation'=> \Config\Services::validation(),
             'listsepatu' => $listSepatu,
             'sepatu' => $this->sepatuMasukModel->getSepatuMasuk($id),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
@@ -261,35 +269,42 @@ class SepatuMasuk extends BaseController
 
     public function export()
     {
+        // dd($this->request->getVar());
+        $startdate=$this->request->getVar('start_date');
+        $enddate=$this->request->getVar('end_date');
         // ambil data transaction dari database
-        $transactions = $this->sepatuMasukModel->getExportSepatuMasuk();
+        $transactions = $this->sepatuMasukModel->getExportSepatuMasuk($startdate,$enddate);
+        // dd($transactions);
+        // echo view('export/sepatumasuk',$transactions);
         // panggil class Sreadsheet baru
         $spreadsheet = new Spreadsheet;
         // Buat custom header pada file excel
         $spreadsheet->setActiveSheetIndex(0)
                     ->setCellValue('A1', 'No')
                     ->setCellValue('B1', 'Sepatu')
-                    ->setCellValue('C1', 'Batch')
-                    ->setCellValue('D1', 'Waktu Transaksi')
-                    ->setCellValue('E1', 'Jumlah')
-                    ->setCellValue('F1', 'Total Harga');
+                    ->setCellValue('C1', 'Waktu Transaksi')
+                    ->setCellValue('D1', 'Jumlah')
+                    ->setCellValue('E1', 'Total Harga');
         // define kolom dan nomor
         $kolom = 2;
         $nomor = 1;
+        $jumlah_harga = 0;
         // tambahkan data transaction ke dalam file excel
         foreach($transactions as $data) {
     
             $spreadsheet->setActiveSheetIndex(0)
                         ->setCellValue('A' . $kolom, $nomor)
                         ->setCellValue('B' . $kolom, $data['nama_sepatu'])
-                        ->setCellValue('D' . $kolom, $data['waktu_transaksi'])
-                        ->setCellValue('E' . $kolom, $data['stock'])
-                        ->setCellValue('F' . $kolom, "Rp. ".number_format($data['total_harga']));
-    
+                        ->setCellValue('C' . $kolom, $data['waktu_transaksi'])
+                        ->setCellValue('D' . $kolom, $data['stock'])
+                        ->setCellValue('E' . $kolom, "Rp. ".number_format($data['total_harga']));
+            $jumlah_harga = $jumlah_harga + $data['total_harga'];
             $kolom++;
             $nomor++;
     
         }
+        $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('E' . $kolom, "Rp. ".number_format($jumlah_harga));
         // download spreadsheet dalam bentuk excel .xlsx
         $writer = new Xlsx($spreadsheet);
     
@@ -299,6 +314,14 @@ class SepatuMasuk extends BaseController
     
         $writer->save('php://output');
     }
+
+    // public function excel(){
+    //     $data= [
+    //         'sepatumasuk' => $this->sepatuMasukModel->getExportSepatuMasuk(),
+    //     ];
+
+    //     echo view('export/sepatumasuk',$data);
+    // }
     
 	//--------------------------------------------------------------------
 

@@ -34,9 +34,10 @@
                     <div class="col-sm-10">
                         <select class="custom-select <?= ($validation->hasError('sepatu')) ? 'is-invalid' : '' ?>" id="sepatu" name="sepatu">
                             <option selected value="" >Sepatu</option>
+                            <?php foreach ($sepatu as $s) : ?>
+                                <option value="<?= $s['id'] ?>" <?= old('sepatu') == $s['id'] ? 'selected' : '' ?> data-harga="<?= $s['harga'] ?>"><?= ucfirst($s['nama_sepatu']) ?></option>
+                            <?php endforeach ?>
                         </select>
-                        <input type="hidden" name="sepatu_text" id="sepatu_text" value="<?= old('sepatu_text') ? old('sepatu_text') : '' ?>">
-                        <input type="hidden" name="harga_text" id="harga_text" value="<?= old('harga_text') ? old('harga_text') : '' ?>">
                         <div class="invalid-feedback">
                             <?= $validation->getError('sepatu') ?>
                         </div>
@@ -64,7 +65,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="batch" class="col-sm-2 col-form-label">Batch</label>
+                    <label for="size" class="col-sm-2 col-form-label">Batch</label>
                     <div class="col-sm-10">
                         <select class="custom-select <?= ($validation->hasError('batch')) ? 'is-invalid' : '' ?>" id="batch" name="batch">
                             <option selected value="" >Batch</option>
@@ -116,7 +117,7 @@
                 <div class="form-group row">
                     <label for="waktu_transaksi" class="col-sm-2 col-form-label">Tanggal Keluar</label>
                     <div class="col-sm-10">
-                        <input type="date" class="form-control <?= ($validation->hasError('waktu_transaksi')) ? 'is-invalid' : '' ?>" id="waktu_transaksi" name="waktu_transaksi" value="<?= old('waktu_transaksi')?>" >
+                        <input type="date" class="form-control <?= ($validation->hasError('waktu_transaksi')) ? 'is-invalid' : '' ?>" id="waktu_transaksi" name="waktu_transaksi"><?= old('waktu_transaksi')?>
                         <div class="invalid-feedback">
                             <?= $validation->getError('waktu_transaksi') ?>
                         </div>
@@ -157,25 +158,45 @@ function calculate(val){
 
 <script type="text/javascript">
         $(document).ready(function(){
-            let old_merk = "<?php echo old('merk') ? old('merk') : '' ?>";
-            let old_sepatu_id = "<?php echo old('sepatu') ? old('sepatu') : '' ?>";
-            let old_sepatu_text = "<?php echo old('sepatu_text') ? old('sepatu_text') : '' ?>";
-            let old_harga_text = "<?php echo old('harga_text') ? old('harga_text') : '' ?>";
-            let old_size = "<?php echo old('size') ? old('size') : '' ?>";
-            let old_batch = "<?php echo old('batch') ? old('batch') : '' ?>";
-            let old_jumlah = "<?php echo old('stock') ? old('stock') : '' ?>";
-            let old_diskon = "<?php echo old('diskon') ? old('diskon') : '' ?>";
-            let old_harga = "<?php echo old('harga') ? old('harga') : '' ?>";
-            
-            $('#sepatu').select2({
-                placeholder: "--Pilih--"
-            });
-            $('#size').select2({
-                placeholder: "--Pilih--"
-            });
-            $('#batch').select2({
-                placeholder: "--Pilih--"
-            });
+            //bbbbbbbbbbb
+            // $('#category_item').selectpicker();
+
+            // $('#sub_category_item').selectpicker();
+
+            // load_data('category_data');
+
+            // function load_data(type, category_id = '')
+            // {
+            //     $.ajax({
+            //     url:"load_data.php",
+            //     method:"POST",
+            //     data:{type:type, category_id:category_id},
+            //     dataType:"json",
+            //     success:function(data)
+            //     {
+            //         var html = '';
+            //         for(var count = 0; count < data.length; count++)
+            //         {
+            //         html += '<option value="'+data[count].id+'">'+data[count].name+'</option>';
+            //         }
+            //         if(type == 'category_data')
+            //         {
+            //         $('#category_item').html(html);
+            //         $('#category_item').selectpicker('refresh');
+            //         }
+            //         else
+            //         {
+            //         $('#sub_category_item').html(html);
+            //         $('#sub_category_item').selectpicker('refresh');
+            //         }
+            //     }
+            //     })
+            // }
+
+            // $(document).on('change', '#category_item', function(){
+            //     var category_id = $('#category_item').val();
+            //     load_data('sub_category_data', category_id);
+            // });
             //aaaaaaaaaaaaaaa
             $('#stock').attr('disabled',true);
             $('#diskon').attr('disabled',true);
@@ -183,67 +204,19 @@ function calculate(val){
             $('#sepatu').attr('disabled',true);
             $('#size').attr('disabled',true);
             $('#batch').attr('disabled',true);
-
-            if(old_merk != ''){
-                var merk_id = $('#merk').val();
-                getSepatu(merk_id,old_sepatu_id,old_sepatu_text,old_harga);
-                $('#sepatu').attr('disabled',false);
-            }
-
-            if(old_sepatu_id != ''){
-                getSize(old_sepatu_id,old_size,old_size);
-                $('#size').attr('disabled',false);
-            }
-
-            if(old_size != ''){
-                getSize(old_sepatu_id,old_size,old_size);
-                $('#batch').attr('disabled',false);
-            }
-            
-            if(old_batch != ''){
-                getBatch(old_sepatu_id,old_size,old_batch,old_batch);
-                $('#stock').attr('disabled',false);
-            }
-
-            if(old_jumlah != ''){
-                $('#diskon').attr('disabled',false);
-            }
-
-            if(old_diskon != ''){
-                $('#harga').attr('disabled',false);
-                $('#harga').attr('readonly',true);
-                let harga_sepatu = parseInt($('#harga_text').val());
-                let stock = parseInt($('#stock').val());
-                let diskon = parseInt($('#diskon').val())/100;
-                total_harga =  (harga_sepatu*stock)-(harga_sepatu*stock*diskon);
-                $('#harga').val(total_harga);
-            }
-
             $('#merk').change(function() {
                 if($(this).val()){
-                    var merk_id = $('#merk').val();
-                    getSepatu(merk_id);
                     $('#sepatu').attr('disabled',false);
-                    // load_data()
                 }
             })
             $('#sepatu').change(function() {
-                let sepatu= $('#sepatu').select2('data');
-                $('#sepatu_text').val(sepatu[0].text);
-                $('#harga_text').val(sepatu[0].harga);
                 if($(this).val()){
-                    var id_sepatu = $('#sepatu').val();
                     $('#size').attr('disabled',false);
-                    getSize(id_sepatu);
                 }
-                
             })
             $('#size').change(function() {
                 if($(this).val()){
-                    var id_sepatu = $('#sepatu').val();
-                    var size = $('#size').val();
                     $('#batch').attr('disabled',false);
-                    getBatch(id_sepatu,size);
                 }
             })
             $('#batch').change(function() {
@@ -292,146 +265,13 @@ function calculate(val){
                     $(this).val(0);
                 }
                 if($('#stock').val() && $('#sepatu').val()){
-                    // let harga_sepatu = parseInt($('#sepatu option:selected').attr('harga'));
-                    let harga_sepatu = parseInt($('#harga_text').val());
+                    let harga_sepatu = parseInt($('#sepatu option:selected').attr('data-harga'));
                     let stock = parseInt($('#stock').val());
                     let diskon = parseInt($('#diskon').val())/100;
                     total_harga =  (harga_sepatu*stock)-(harga_sepatu*stock*diskon);
                     $('#harga').val(total_harga);
                 }
             });
-
-            function getSepatu(id,old_id, old_text,old_harga) {
-                route ="<?php echo base_url('sepatukeluar/combosepatu') ?>";
-                $("#sepatu").select2({
-                    placeholder: "--Pilih--",
-                    ajax: {
-                        url: route,
-                        dataType: 'json',
-                        type: "POST",
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                merk_id: id
-                            };
-                        },
-                        // results: function (data, page) {
-                        //     return { results: data.results };
-                        // }
-                        processResults: function(data){
-                            console.log(data);
-                            return {
-                                results: data
-                            };
-                        },
-                        cache: true
-                    },
-                    formatAjaxError:function(a,b,c){return"Not Found .."}
-                });
-
-                if((typeof old_id !== 'undefined') && (typeof old_text !== 'undefined') && (typeof old_harga !== 'undefined')){
-                    // create the option and append to Select2
-                    var option = new Option(old_text, old_id, true, true);
-                    $('#sepatu').append(option).trigger('change');
-
-                    const data = {id: old_id, text: old_text,harga:old_harga};
-                    // manually trigger the `select2:select` event
-                    $('#sepatu').trigger({
-                        type: 'select2:select',
-                        params: {
-                            data: data
-                        }
-                    });
-                }
-            }
-
-            function getSize(id,old_id, old_text) {
-                route ="<?php echo base_url('sepatukeluar/combosize') ?>";
-                $("#size").select2({
-                    placeholder: "--Pilih--",
-                    ajax: {
-                        url: route,
-                        dataType: 'json',
-                        type: "POST",
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                id_sepatu: id
-                            };
-                        },
-                        // results: function (data, page) {
-                        //     return { results: data.results };
-                        // }
-                        processResults: function(data){
-                            return {
-                                results: data
-                            };
-                        },
-                        cache: true
-                    },
-                    formatAjaxError:function(a,b,c){return"Not Found .."}
-                });
-
-                if((typeof old_id !== 'undefined') && (typeof old_text !== 'undefined')){
-                    // create the option and append to Select2
-                    var option = new Option(old_text, old_id, true, true);
-                    $('#size').append(option).trigger('change');
-
-                    const data = {id: old_id, text: old_text};
-                    // manually trigger the `select2:select` event
-                    $('#size').trigger({
-                        type: 'select2:select',
-                        params: {
-                            data: data
-                        }
-                    });
-                }
-            }
-
-            function getBatch(id_sepatu,size, old_id,old_text) {
-                route ="<?php echo base_url('sepatukeluar/combobatch') ?>";
-                console.log("masuk");
-                $("#batch").select2({
-                    placeholder: "--Pilih--",
-                    ajax: {
-                        url: route,
-                        dataType: 'json',
-                        type: "POST",
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                id_sepatu: id_sepatu,
-                                size:size
-                            };
-                        },
-                        // results: function (data, page) {
-                        //     return { results: data.results };
-                        // }
-                        processResults: function(data){
-                            return {
-                                results: data
-                            };
-                        },
-                        cache: true
-                    },
-                    formatAjaxError:function(a,b,c){return"Not Found .."}
-                });
-
-                if((typeof old_id !== 'undefined') && (typeof old_text !== 'undefined')){
-                    // create the option and append to Select2
-                    var option = new Option(old_text, old_id, true, true);
-                    $('#batch').append(option).trigger('change');
-
-                    const data = {id: old_id, text: old_text};
-                    // manually trigger the `select2:select` event
-                    $('#batch').trigger({
-                        type: 'select2:select',
-                        params: {
-                            data: data
-                        }
-                    });
-                }
-            }
             
         });
     </script>

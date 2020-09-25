@@ -19,12 +19,15 @@ class Merk extends BaseController
     public function index()
 	{
         $listMerk = $this->merkModel->getMerk();
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
             'title' => 'Merk',
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
-            'user_login' => $this->session->get('user_login')
+            'user_login' => $this->session->get('user_login'),
+            'yesMerk' => true
         ];
         
         //search
@@ -33,22 +36,27 @@ class Merk extends BaseController
 		return view('merk/index',$data);
     }
 
-    public function detail($slug)
+    public function detail($id)
     {
         $listMerk = $this->merkModel->getMerk();
-        $sepatu = $this->sepatuModel->getSepatu($slug);
+        $sepatu = $this->sepatuModel->getSepatuPerMerk($id);
+        $merkNow = $this->merkModel->getMerk($id);
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
-            'title' => $sepatu['nama_sepatu'],
+            'title' => $merkNow['nama_merk'],
             'sepatu' => $sepatu,
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
+            'merkNow' => $merkNow,
             'roleId' => $this->session->get('role'),
-            'user_login' => $this->session->get('user_login')
+            'user_login' => $this->session->get('user_login'),
+            'yesMerk' => true
         ];
-        if(empty($data['sepatu'])){
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Sepatu '.$slug.' tidak ditemukan.');
+        if(empty($data['merkNow'])){
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Merk '.$id.' tidak ditemukan.');
         }
-        return view('sepatu/detail',$data);
+        return view('merk/detail',$data);
     }
 
     public function create()
@@ -117,21 +125,30 @@ class Merk extends BaseController
     public function delete($id){
         //cari gambar berdasasrkan id
         $merk = $this->merkModel->find($id);
-        // delete gambar
-        if($merk['logo'] != 'default_logo.jpg'){
-            unlink('img/'.$merk['logo']);
+        $sepatu = $this->sepatuModel->getSepatuPerMerk($id);
+        if($sepatu){
+            session()->setFlashdata('pesan', 'Data tidak dapat dihapus karena masih memiliki sepatu');    
+        } else {
+            // delete gambar
+            if($merk['logo'] != 'default_logo.jpg'){
+                unlink('img/'.$merk['logo']);
+            }
+            $this->merkModel->delete($id);
+            session()->setFlashdata('pesan', 'Data berhasil dihapus');
         }
-        $this->merkModel->delete($id);
-        session()->setFlashdata('pesan', 'Data berhasil dihapus');
         return redirect()->to('/merk');
     }
 
     public function edit($id){
-        $listMerk = $this->merkModel->getMerk($id);
+        $listMerk = $this->merkModel->getMerk();
+        $editMerk = $this->merkModel->getMerk($id);
+        $listKategori = $this->kategoriModel->getKategori();
         $data=[
             'title' => 'Edit Merk',
             'validation'=> \Config\Services::validation(),
             'merk' => $listMerk,
+            'editmerk' => $editMerk,
+            'listKategori' => $listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')

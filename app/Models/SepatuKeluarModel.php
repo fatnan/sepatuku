@@ -29,7 +29,7 @@ class SepatuKeluarModel extends Model
     public function getSepatuKeluar($id = false)
     {
         if($id == false){
-            return $this->findAll();
+            return $this->orderBy('waktu_transaksi','DESC')->findAll();
         }
         $sepatu = $this->db->table('sepatukeluar')
             ->select('
@@ -87,9 +87,51 @@ class SepatuKeluarModel extends Model
         return $size;
     }
 
-    public function getExportSepatuKeluar()
+    public function getExportSepatuKeluar($startdate=null,$enddate=null)
     {
-        $sepatu = $this->db->table('sepatukeluar')
+        if($startdate==null && $enddate==null){
+            $sepatu = $this->db->table('sepatukeluar')
+                ->select('
+                sepatukeluar.id AS id_sepatukeluar,
+                sepatukeluar.total_harga,
+                sepatukeluar.size,
+                sepatukeluar.stock,
+                sepatukeluar.waktu_transaksi,
+                sepatukeluar.keterangan,
+                sepatukeluar.diskon,
+                sepatukeluar.batch,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatukeluar.id_sepatu')
+                ->get()->getResultArray(); 
+            return $sepatu;
+        } else if($startdate == null) {
+            $sepatu = $this->db->table('sepatukeluar')
+                ->select('
+                sepatukeluar.id AS id_sepatukeluar,
+                sepatukeluar.total_harga,
+                sepatukeluar.size,
+                sepatukeluar.stock,
+                sepatukeluar.waktu_transaksi,
+                sepatukeluar.keterangan,
+                sepatukeluar.diskon,
+                sepatukeluar.batch,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatukeluar.id_sepatu')
+                ->where('waktu_transaksi <',$enddate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        } else if($enddate == null){
+            $sepatu = $this->db->table('sepatukeluar')
             ->select('
             sepatukeluar.id AS id_sepatukeluar,
             sepatukeluar.total_harga,
@@ -106,7 +148,31 @@ class SepatuKeluarModel extends Model
             sepatu.id_merk
             ')
             ->join('sepatu','sepatu.id=sepatukeluar.id_sepatu')
-            ->get()->getResultArray(); 
-        return $sepatu;
+                ->where('waktu_transaksi >',$startdate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        } else {
+            $sepatu = $this->db->table('sepatukeluar')
+                ->select('
+                sepatukeluar.id AS id_sepatukeluar,
+                sepatukeluar.total_harga,
+                sepatukeluar.size,
+                sepatukeluar.stock,
+                sepatukeluar.waktu_transaksi,
+                sepatukeluar.keterangan,
+                sepatukeluar.diskon,
+                sepatukeluar.batch,
+                sepatu.gambar,
+                sepatu.nama_sepatu,
+                sepatu.slug,
+                sepatu.id,
+                sepatu.id_merk
+                ')
+                ->join('sepatu','sepatu.id=sepatukeluar.id_sepatu')
+                ->where('waktu_transaksi >',$startdate)
+                ->where('waktu_transaksi <',$enddate)
+                ->get()->getResultArray(); 
+            return $sepatu;
+        }
     }
 }

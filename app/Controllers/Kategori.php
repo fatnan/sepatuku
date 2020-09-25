@@ -22,8 +22,10 @@ class Kategori extends BaseController
             'title' => 'Kategori',
             'username' => ucfirst($this->session->get('username')),
             'kategori' => $this->kategoriModel->getKategori(),
+            'merk' => $this->merkModel->getMerk(),
             'roleId' => $this->session->get('role'),
-            'user_login' => $this->session->get('user_login')
+            'user_login' => $this->session->get('user_login'),
+            'yesKategori' => true
         ];
         
         //search
@@ -32,29 +34,35 @@ class Kategori extends BaseController
 		return view('kategori/index',$data);
     }
 
-    public function detail($slug)
+    public function detail($id)
     {
         $listMerk = $this->merkModel->getMerk();
-        $sepatu = $this->sepatuModel->getSepatu($slug);
+        $sepatu = $this->sepatuModel->getSepatuPerKategori($id);
+        $kategoriNow = $this->kategoriModel->getKategori($id);
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
-            'title' => $sepatu['nama_sepatu'],
+            'title' => $kategoriNow['nama_kategori'],
             'sepatu' => $sepatu,
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
+            'kategoriNow' => $kategoriNow,
             'roleId' => $this->session->get('role'),
-            'user_login' => $this->session->get('user_login')
+            'user_login' => $this->session->get('user_login'),
+            'yesKategori' => true
         ];
-        if(empty($data['sepatu'])){
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Sepatu '.$slug.' tidak ditemukan.');
+        if(empty($data['kategoriNow'])){
+            throw new \CodeIgniter\Exceptions\PageNotFoundException('Kategori '.$id.' tidak ditemukan.');
         }
-        return view('sepatu/detail',$data);
+        return view('kategori/detail',$data);
     }
-
     public function create()
     {
         $data=[
             'title' => 'Tambah Kategori',
+            'merk' => $this->merkModel->getMerk(),
             'validation'=> \Config\Services::validation(),
+            'kategori' => $this->kategoriModel->getKategori(),
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
@@ -91,20 +99,28 @@ class Kategori extends BaseController
     public function delete($id){
         //cari gambar berdasasrkan id
         $kategori = $this->kategoriModel->find($id);
-        $this->kategoriModel->delete($id);
-        session()->setFlashdata('pesan', 'Data berhasil dihapus');
+        $sepatu = $this->sepatuModel->getSepatuPerKategori($id);
+        if($sepatu){
+            session()->setFlashdata('pesan', 'Data tidak dapat dihapus karena masih ada sepatu');    
+        } else {
+            $this->kategoriModel->delete($id);
+            session()->setFlashdata('pesan', 'Data berhasil dihapus');
+        }
         return redirect()->to('/kategori');
     }
 
     public function edit($id){
-        $listKategori = $this->kategoriModel->getKategori($id);
+        $listKategori = $this->kategoriModel->getKategori();
+        $kategoriNow = $this->kategoriModel->getKategori($id);
         $data=[
             'title' => 'Edit Kategori',
             'validation'=> \Config\Services::validation(),
-            'kategori' => $listKategori,
+            'kategoriNow' => $kategoriNow,
+            'kategori'  => $listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
-            'user_login' => $this->session->get('user_login')
+            'user_login' => $this->session->get('user_login'),
+            'merk' => $this->merkModel->getMerk(),
         ];
         
         return view('kategori/edit',$data);

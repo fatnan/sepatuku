@@ -19,10 +19,12 @@ class Sepatu extends BaseController
     public function index()
 	{
         $listMerk = $this->merkModel->getMerk();
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
             'title' => 'Sepatu',
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
@@ -49,11 +51,13 @@ class Sepatu extends BaseController
     {
         $listMerk = $this->merkModel->getMerk();
         $sepatu = $this->sepatuModel->getSepatu($slug);
+        $listKategori = $this->kategoriModel->getKategori();
         $data = [
             'title' => $sepatu['nama_sepatu'],
             'sepatu' => $sepatu,
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')
         ];
@@ -183,11 +187,13 @@ class Sepatu extends BaseController
 
     public function edit($slug){
         $listMerk = $this->merkModel->getMerk();
+        $listKategori = $this->kategoriModel->getKategori();
         $data=[
             'title' => 'Edit Sepatu',
             'validation'=> \Config\Services::validation(),
             'sepatu' => $this->sepatuModel->getSepatu($slug),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'username' => ucfirst($this->session->get('username')),
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login')

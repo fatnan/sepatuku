@@ -31,7 +31,7 @@
                                 <form action="/user/delete/<?= $user->id; ?>" method="post" class="d-inline">
                                     <?= csrf_field(); ?>
                                     <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete Sepatu ini?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete User ini?')">Delete</button>
                                 </form>
 
                                 <a href="/user" class="btn btn-success">Back</a>

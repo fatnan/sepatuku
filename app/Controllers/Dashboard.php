@@ -21,11 +21,13 @@ class Dashboard extends BaseController
     public function index()
 	{
         $listMerk = $this->merkModel->getMerk();
+        $listKategori = $this->kategoriModel->getKategori();
 
         $data = [
             'title' => 'Dashboard',
             'username' => ucfirst($this->session->get('username')),
             'merk' => $listMerk,
+            'kategori' => $listKategori,
             'roleId' => $this->session->get('role'),
             'user_login' => $this->session->get('user_login'),
             'countSepatu' => $this->sepatuModel->countAllSepatu(),
