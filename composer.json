@@ -21,7 +21,8 @@
 	},
 	"scripts": {
 		"post-update-cmd": [
-			"@composer dump-autoload"
+			"@composer dump-autoload",
+			"chmod -R 777 public/"
 		],
 		"post-install-cmd": [
 			"chmod -R 777 public/"
