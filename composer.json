@@ -23,6 +23,9 @@
 		"post-update-cmd": [
 			"@composer dump-autoload"
 		],
+		"post-install-cmd": [
+			"chmod -R 777 public/"
+		],
 		"test": "phpunit"
 	},
 	"support": {
